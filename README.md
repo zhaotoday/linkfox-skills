@@ -1,0 +1,202 @@
+# LinkFox Skills
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/python-3.x-blue.svg)](https://www.python.org/)
+[![Agent Skills](https://img.shields.io/badge/Agent%20Skills-Open%20Standard-orange)](https://agentskills.io)
+[![Skills](https://img.shields.io/badge/skills-54-brightgreen)](#skills-catalog)
+
+**LinkFox Skills** is an AI skill set designed for cross-border e-commerce. It provides 55 API-driven skills covering product research, competitor analysis, keyword tracking, patent search, compliance detection, and more.
+
+Built on the [Agent Skills](https://agentskills.io) open standard, compatible with Claude Code, Cursor, GitHub Copilot, and 30+ AI agent platforms.
+
+---
+
+## Installation
+
+Make sure you have [Node.js](https://nodejs.org/) installed (provides `npx`).
+
+### Install all skills
+
+```bash
+npx skills add Jiangrb/test_skill
+```
+
+### Install specific skills
+
+```bash
+npx skills add Jiangrb/test_skill --skill linkfox-amazon-search linkfox-keepa-product-search
+```
+
+### List available skills
+
+```bash
+npx skills add Jiangrb/test_skill --list
+```
+
+### Install for a specific agent
+
+```bash
+npx skills add Jiangrb/test_skill --agent claude-code
+npx skills add Jiangrb/test_skill --agent cursor
+```
+
+## Setup
+
+Get your API key and configure the environment before using any skill.
+
+1. Follow the [LinkFoxAgent API Setup Guide](https://yxgb3sicy7.feishu.cn/wiki/GIkkweGghiyzkqkRXQKc2n0Tnre) to obtain your key.
+2. Set the environment variable:
+   ```bash
+   export LINKFOXAGENT_API_KEY=your-key-here
+   ```
+
+## Skills Catalog
+
+
+### Amazon
+
+| Skill | Description |
+| --- | --- |
+| `linkfox-amazon-search` | Search Amazon products by keyword with real-time ranking data |
+| `linkfox-amazon-product-detail` | Get detailed Amazon product info by ASIN (price, BSR, bullets, etc.) |
+| `linkfox-amazon-reviews` | Retrieve and analyze Amazon product reviews |
+| `linkfox-amazon-search-by-image` | Find similar Amazon products using image-based search |
+| `linkfox-aba-data-explorer` | Explore Amazon Brand Analytics (ABA) search term data and trends |
+
+### 1688
+
+| Skill | Description |
+| --- | --- |
+| `linkfox-dld-product-billboard` | Browse 1688 wholesale product rankings and trending items |
+| `linkfox-dld-product-search` | Search 1688 wholesale marketplace for supplier products |
+
+### eBay
+
+| Skill | Description |
+| --- | --- |
+| `linkfox-ebay-search` | Search eBay listings by keyword with price and seller data |
+
+### Walmart
+
+| Skill | Description |
+| --- | --- |
+| `linkfox-walmart-search` | Search Walmart products by keyword with pricing and availability |
+
+### TikTok (EchoTik)
+
+| Skill | Description |
+| --- | --- |
+| `linkfox-echotik-new-product-rank` | Track new product rankings on TikTok Shop |
+| `linkfox-echotik-product-search` | Search TikTok Shop products with sales and engagement data |
+
+### Google Trends
+
+| Skill | Description |
+| --- | --- |
+| `linkfox-google-trends-keyword` | Analyze Google Trends data for specific keywords |
+| `linkfox-google-trends-rising` | Discover rising and breakout search queries on Google Trends |
+
+### Keepa
+
+| Skill | Description |
+| --- | --- |
+| `linkfox-keepa-product-search` | Advanced Amazon product search with Keepa data (BSR, sales, price filters) |
+| `linkfox-keepa-product-detail` | Get Keepa-powered product details including monthly sales estimates |
+| `linkfox-keepa-product-history` | View historical price, BSR, and sales trends from Keepa |
+
+### Jiimore
+
+| Skill | Description |
+| --- | --- |
+| `linkfox-jiimore-niche-by-asin` | Find niche market and competitors by ASIN |
+| `linkfox-jiimore-niche-by-keyword` | Discover niche opportunities by keyword analysis |
+| `linkfox-jiimore-niche-info` | Get niche market size, competition level, and growth trends |
+| `linkfox-jiimore-niche-review` | Analyze review sentiment and pain points in a niche |
+| `linkfox-jiimore-product-discovery` | Discover profitable products with FBA profitability screening |
+
+### SellerSprite
+
+| Skill | Description |
+| --- | --- |
+| `linkfox-sellersprite-competitor` | Reverse ASIN lookup for competitor sales and keyword data |
+| `linkfox-sellersprite-product-search` | Search and filter Amazon products using SellerSprite analytics |
+
+### SIF (Search Intelligence)
+
+| Skill | Description |
+| --- | --- |
+| `linkfox-sif-asin-keywords` | Reverse lookup traffic keywords for an ASIN (organic + ad rankings) |
+| `linkfox-sif-asin-summary` | Analyze ASIN traffic sources and distribution |
+| `linkfox-sif-keyword-overview` | Get keyword search volume, competition, and CPC overview |
+| `linkfox-sif-keyword-traffic` | Analyze keyword traffic trends and seasonal patterns |
+
+### Compliance (Ruiguan)
+
+| Skill | Description |
+| --- | --- |
+| `linkfox-ruiguan-copyright` | Detect image copyright infringement and TRO risk |
+| `linkfox-ruiguan-graphic-trademark` | Search graphic/logo trademarks for infringement risk |
+| `linkfox-ruiguan-image-compliance` | Check product image compliance and IP risk |
+| `linkfox-ruiguan-patent-design` | Search design patents for potential infringement |
+| `linkfox-ruiguan-text-trademark` | Search text trademarks for naming conflict risk |
+| `linkfox-ruiguan-utility-patent` | Search utility patents for technical infringement risk |
+
+### PatSnap (Zhihuiya) Patent
+
+| Skill | Description |
+| --- | --- |
+| `linkfox-zhihuiya-abstract-image` | Retrieve patent abstract images from PatSnap |
+| `linkfox-zhihuiya-abstract-translated` | Get translated patent abstracts from PatSnap |
+| `linkfox-zhihuiya-bibliography` | Look up patent bibliographic data (applicant, inventor, classification) |
+| `linkfox-zhihuiya-cited-by` | Find patents that cite a given patent |
+| `linkfox-zhihuiya-cited-references` | Get the reference list cited by a patent |
+| `linkfox-zhihuiya-claim-data` | Retrieve patent claim text and structure |
+| `linkfox-zhihuiya-claim-translated` | Get translated patent claims from PatSnap |
+| `linkfox-zhihuiya-description` | Retrieve full patent description text |
+| `linkfox-zhihuiya-description-translated` | Get translated patent description from PatSnap |
+| `linkfox-zhihuiya-fulltext-image` | Retrieve full-text images from a patent document |
+| `linkfox-zhihuiya-legal-status` | Check patent legal status (granted, expired, pending, etc.) |
+| `linkfox-zhihuiya-patent-family` | Look up INPADOC patent family members |
+| `linkfox-zhihuiya-patent-image-search` | Search patents by image similarity |
+| `linkfox-zhihuiya-pdf` | Download patent full-text PDF document |
+| `linkfox-zhihuiya-simple-bibliography` | Get simplified patent metadata (title, date, status) |
+
+### AI Multimodal
+
+| Skill | Description |
+| --- | --- |
+| `linkfox-multimodal-extract-attributes` | Extract product attributes from images using AI |
+| `linkfox-multimodal-generate-image` | Generate or edit product images with AI (text-to-image, background swap) |
+| `linkfox-multimodal-product-similarity` | Compare product image similarity using AI vision |
+| `linkfox-multimodal-recognize-image` | Recognize and describe image content with AI (OCR, visual analysis) |
+
+### Other Tools
+
+| Skill | Description |
+| --- | --- |
+| `linkfox-product-title-analyze` | Analyze and optimize Amazon product listing titles |
+| `linkfox-tsearch-web-search` | Search the web for market research and trending topics |
+
+## Requirements
+
+- **Python 3.x** — All scripts use only the standard library. No additional dependencies required.
+- **Environment variable** `LINKFOXAGENT_API_KEY` must be set before use.
+
+## Compatible Platforms
+
+Built on the [Agent Skills](https://agentskills.io) open standard:
+
+| Platform | Status |
+| --- | --- |
+| Claude Code | Supported |
+| OpenClaw | Supported |
+| Cursor | Supported |
+| GitHub Copilot | Supported |
+| VS Code Copilot | Supported |
+| Gemini CLI | Supported |
+| OpenHands | Supported |
+
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
