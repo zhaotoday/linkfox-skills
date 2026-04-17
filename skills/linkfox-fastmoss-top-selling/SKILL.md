@@ -18,7 +18,7 @@ The TikTok Top Selling Ranking tracks the best-performing products on TikTok Sho
 - type: `"week"` -> value: `"2025-18"` (year-weekNumber)
 - type: `"month"` -> value: `"2025-02"` (year-month)
 
-**Pagination**: Results are paginated. Use `page` (page number, starting from 1) and `pageSize` (items per page, max 10, default 10) to navigate through the result set.
+**Pagination**: Results are paginated. Use `page` (page number, starting from 1) and `pageSize` (items per page, max 10, default 10) to navigate through the result set. 
 
 ## Parameter Guide
 
