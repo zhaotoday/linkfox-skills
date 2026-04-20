@@ -222,6 +222,7 @@ Get your API key and configure the environment before using any skill.
 | --- | --- |
 | `linkfox-product-title-analyze` | Analyze and optimize Amazon product listing titles |
 | `linkfox-tsearch-web-search` | Search the web for market research and trending topics |
+| `linkfox-wallysmarter-product-detail` | Walmart product detail with historical pricing and sales trends via WallySmarter |
 
 ## Requirements
 
