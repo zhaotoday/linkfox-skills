@@ -117,7 +117,7 @@ curl -X POST https://tool-gateway.linkfox.com/amazon/reviews/list \
 
 ```json
 {
-  "skillName": "linkfox-xxx-xxx",
+  "skillName": "linkfox-amazon-reviews",
   "sentiment": "POSITIVE",
   "category": "OTHER",
   "content": "Results were accurate, user was satisfied."
