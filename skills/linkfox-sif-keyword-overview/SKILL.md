@@ -33,14 +33,19 @@ The SIF Keyword Overview tool provides a comprehensive snapshot of competition m
 | Top Rated Products | topRatedProductCount | Products in the Top Rated recommendation section |
 | Search Recommendation Products | searchRecommendationProductCount | Products recommended by Amazon during search |
 | Editorial Recommendations Products | editorialRecommendationsProductCount | Products in Editorial Recommendations section |
+| Recommendation Non-ad Products | recNonadProductCount | Products in recommendation slots classified as non-ad (organic recommendations) |
+| Recommendation Ad Products | recAdProductCount | Products in recommendation slots classified as ads |
+| SIF-Tracked Exposed ASINs | trackedAsinTotalCount | Deduplicated count of ASINs that SIF tracked with any exposure score (natural/ad/recommendation) — upstream field `totalAsinNum` |
 | Total Marketplace Keywords | totalMarketplaceKeywordCount | Total number of keywords in the marketplace |
+| Data Period Start Date | dataPeriodStartDate | ABA week start date for the returned data (yyyy-MM-dd) |
+| Data Period End Date | dataPeriodEndDate | ABA week end date for the returned data (yyyy-MM-dd) |
 | Data Update Time | keywordDataUpdateTime | Last update timestamp for this keyword's data |
 
 ## Supported Marketplaces
 
-US (United States), CA (Canada), MX (Mexico), UK (United Kingdom), DE (Germany), FR (France), IT (Italy), ES (Spain), JP (Japan), IN (India), AU (Australia), BR (Brazil), NL (Netherlands), SE (Sweden), PL (Poland), TR (Turkey), AE (United Arab Emirates), SA (Saudi Arabia), SG (Singapore)
+13 marketplaces: US (United States), UK (United Kingdom), DE (Germany), CA (Canada), JP (Japan), FR (France), ES (Spain), IT (Italy), MX (Mexico), AU (Australia), AE (United Arab Emirates), BR (Brazil), SA (Saudi Arabia).
 
-Default marketplace is **US**. Use US when the user does not specify a marketplace.
+Default marketplace is **US**. Use US when the user does not specify a marketplace. Codes outside this list will be rejected by the API pattern.
 
 **Important**: The `keyword` parameter should ideally be in the language of the target marketplace. For example, use German keywords for DE, Japanese for JP, etc. If the user provides keywords in a different language, translate them to the marketplace's local language before querying.
 
@@ -50,10 +55,11 @@ This tool calls the LinkFox tool gateway API. See `references/api.md` for callin
 
 ## Parameter Guide
 
-The tool accepts two parameters:
-
 1. **keyword** (required): The search keyword to analyze. Should be translated to the target marketplace's language for best results. Maximum length: 1000 characters.
 2. **country** (optional): The Amazon marketplace code. Defaults to `US`. See Supported Marketplaces above for valid codes.
+3. **last7d** (optional, boolean, default `true`): Use the latest 7 days. When `false`, the API uses `startDate`/`endDate`.
+4. **startDate** (optional, `yyyy-MM-dd`): Start date for a custom window. Takes effect when `last7d=false`.
+5. **endDate** (optional, `yyyy-MM-dd`): End date paired with `startDate`.
 
 ### Usage Examples
 
@@ -87,6 +93,12 @@ Query: "Compare the competition for 'bluetooth speaker' across US, UK, and DE"
 - Call 2: `{"keyword": "bluetooth speaker", "country": "UK"}`
 - Call 3: `{"keyword": "Bluetooth Lautsprecher", "country": "DE"}`
 
+**6. Specific date range**
+Query: "Competition for 'yoga mat' between 2026-03-08 and 2026-03-14"
+```json
+{"keyword": "yoga mat", "country": "US", "last7d": false, "startDate": "2026-03-08", "endDate": "2026-03-14"}
+```
+
 ## Display Rules
 
 1. **Present data clearly**: Show query results in a well-structured table format. Include all relevant metrics the user asked about.
@@ -95,13 +107,14 @@ Query: "Compare the competition for 'bluetooth speaker' across US, UK, and DE"
 4. **Supply-demand interpretation**: When showing the supply-demand ratio, provide context: values below 1 suggest high demand relative to supply (opportunity); values above 5 suggest a saturated market.
 5. **Ad competition breakdown**: When users ask about advertising competition, break down the total paid advertising count into its components (SP, Brand, Video) for a more detailed view.
 6. **Error handling**: When a query fails, explain the reason based on the `msg` field and suggest adjusting query parameters (e.g., check keyword spelling, try a different marketplace).
-7. **Data freshness**: Always mention the `keywordDataUpdateTime` so users know how recent the data is.
+7. **Data freshness & period**: Always surface `keywordDataUpdateTime` (last refresh) plus `dataPeriodStartDate` ~ `dataPeriodEndDate` (the ABA week the counts describe). Do not present product counts without naming the period.
 8. **No subjective advice**: Present data objectively without making business recommendations unless specifically asked.
 ## Important Limitations
 
 - **Single keyword per request**: Each API call queries one keyword at a time. For multi-keyword comparisons, make separate calls.
 - **Single record response**: The API typically returns one data record per keyword (`total` is usually 1).
-- **Marketplace coverage**: 19 Amazon marketplaces are supported. Keywords not found in a marketplace will return empty results.
+- **Marketplace coverage**: 13 Amazon marketplaces — IN / NL / SE / PL / TR / SG are no longer supported. Keywords not found in the queried marketplace will return empty results.
+- **Time window**: Defaults to the latest 7 days. Pass `last7d=false` plus `startDate`/`endDate` for a custom ABA week range.
 - **Keyword language**: For best accuracy, keywords should be in the local language of the target marketplace.
 
 ## User Expression & Scenario Quick Reference
@@ -118,6 +131,8 @@ Query: "Compare the competition for 'bluetooth speaker' across US, UK, and DE"
 | "Search volume for XX keyword" | Search popularity estimation |
 | "How popular is XX keyword on Amazon" | Keyword popularity ranking |
 | "Compare competition across marketplaces" | Multi-market competition comparison |
+| "How many SIF-tracked ASINs are active on this keyword" | Deduplicated tracked-ASIN count (`trackedAsinTotalCount`) |
+| "Competition for this keyword in a specific week" | Custom date range via `startDate`/`endDate` |
 
 **Not applicable** -- Needs beyond keyword competition overview:
 

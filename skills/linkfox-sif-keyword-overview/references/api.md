@@ -12,8 +12,11 @@ POST Body（JSON）：
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| keyword | string | 是 | 关键词，尽量翻译成对应国家站点的语言。最大长度：1000字符 |
-| country | string | 否 | 国家站点，默认 `US`。可选值：US、CA、MX、UK、DE、FR、IT、ES、JP、IN、AU、BR、NL、SE、PL、TR、AE、SA、SG |
+| keyword | string | 是 | 关键词，尽量翻译成对应国家站点的语言。最大长度：1000 字符 |
+| country | string | 否 | 国家站点，默认 `US`。可选值（共 13 个）：`US`、`UK`、`DE`、`CA`、`JP`、`FR`、`ES`、`IT`、`MX`、`AU`、`AE`、`BR`、`SA` |
+| last7d | boolean | 否 | 是否取最近 7 天数据，默认 `true`。传 `false` 时使用 `startDate`/`endDate` 区间 |
+| startDate | string | 否 | 开始日期 `yyyy-MM-dd`（`last7d=false` 时生效） |
+| endDate | string | 否 | 结束日期 `yyyy-MM-dd`（与 `startDate` 配套） |
 
 
 ## 响应结构
@@ -50,8 +53,13 @@ POST Body（JSON）：
 | topRatedProductCount | integer | Top Rated推荐商品数量。在该关键词下出现在Top Rated（高评分）推荐位的商品数量 |
 | searchRecommendationProductCount | integer | 搜索推荐商品数量。在该关键词搜索时亚马逊推荐的商品数量 |
 | editorialRecommendationsProductCount | integer | Editorial Recommendations商品数量。在该关键词下出现在编辑推荐位的商品数量 |
-| totalMarketplaceKeywordCount | integer | 站点关键词总量。该站点（如美国站）所有关键词的总数量，用于了解市场整体规模 |
-| keywordDataUpdateTime | string | 关键词数据更新时间。该关键词相关数据的最后更新时间 |
+| recNonadProductCount | integer | 推荐位非广告商品数量。在该关键词下推荐位中属于非广告（自然）的商品数量 |
+| recAdProductCount | integer | 推荐位广告商品数量。在该关键词下推荐位中属于广告的商品数量 |
+| trackedAsinTotalCount | integer | SIF 跟踪的有曝光 ASIN 去重总数。该关键词下所有位置（自然/广告/推荐）中，SIF 系统追踪到有曝光得分的 ASIN 去重数量（上游字段：`totalAsinNum`） |
+| totalMarketplaceKeywordCount | integer | 站点关键词总量。该站点所有关键词的总数量，用于了解市场整体规模 |
+| dataPeriodStartDate | string | 数据周期起始日期。本次返回数据对应的 ABA 周起始日期（`yyyy-MM-dd`） |
+| dataPeriodEndDate | string | 数据周期结束日期。本次返回数据对应的 ABA 周结束日期（`yyyy-MM-dd`） |
+| keywordDataUpdateTime | string | 关键词数据更新时间 |
 
 ## 错误码
 
@@ -79,6 +87,15 @@ curl -X POST https://tool-gateway.linkfox.com/sif/keywordOverview \
   -H "Authorization: $LINKFOXAGENT_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"keyword": "wireless charger", "country": "US"}'
+```
+
+### 指定日期区间
+
+```bash
+curl -X POST https://tool-gateway.linkfox.com/sif/keywordOverview \
+  -H "Authorization: $LINKFOXAGENT_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"keyword": "yoga mat", "country": "US", "last7d": false, "startDate": "2026-03-08", "endDate": "2026-03-14"}'
 ```
 
 ---

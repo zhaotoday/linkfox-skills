@@ -1,6 +1,6 @@
 ---
 name: linkfox-sif-asin-keywords
-description: 使用SIF数据反查任意亚马逊ASIN的流量关键词，包括自然排名、广告排名、搜索量、流量占比和转化标记。当用户提到ASIN关键词分析、ASIN反查、流量关键词研究、自然排名查询、广告排名查询、关键词位置追踪、SIF关键词数据、竞品关键词窥探、查看哪些关键词为产品带来流量、分析特定ASIN的关键词表现、ASIN reverse keyword lookup, traffic keywords, organic ranking, ad ranking, search volume, SIF keywords, competitor keyword reverse lookup时触发此技能。即使用户未明确提及"SIF"，只要其需求涉及查找与特定亚马逊商品（ASIN）关联的关键词，也应触发此技能。
+description: 使用SIF数据反查任意亚马逊ASIN的流量关键词，包括自然排名、广告排名、搜索量、流量占比、自然/付费得分、ABA TOP3点击集中度、点击转化率、搜索量同比涨跌及周/月时间窗。当用户提到ASIN关键词分析、ASIN反查、流量关键词研究、自然排名查询、广告排名查询、关键词位置追踪、SIF关键词数据、竞品关键词窥探、查看哪些关键词为产品带来流量、分析特定ASIN的关键词表现、按周/月/最近N天的关键词时间窗、ASIN reverse keyword lookup, traffic keywords, organic ranking, ad ranking, search volume, SIF keywords, competitor keyword reverse lookup, click concentration, click-to-purchase conversion, week-over-week search volume时触发此技能。即使用户未明确提及"SIF"，只要其需求涉及查找与特定亚马逊商品（ASIN）关联的关键词，也应触发此技能。
 ---
 
 # SIF ASIN Keyword Analysis
@@ -17,9 +17,12 @@ SIF ASIN Keyword data reveals the keywords that bring traffic to a specific Amaz
 
 ## Data Fields
 
+### Per-keyword record (each element of `data`)
+
 | Field | API Name | Description | Example |
 |-------|----------|-------------|---------|
 | Keyword | keyword | The search keyword driving traffic | wireless charger |
+| Keyword Translation | translateKeyword | Localized keyword translation for the marketplace | 无线充电器 |
 | ASIN | asin | The product ASIN being queried | B0XXXXXXXX |
 | Organic Rank | productNaturalRank | Product's position in organic search results | 5 |
 | Organic Rank (Display) | naturalRankDisplay | Organic rank as display text | 5 |
@@ -27,19 +30,39 @@ SIF ASIN Keyword data reveals the keywords that bring traffic to a specific Amaz
 | Ad Rank (Display) | adRankDisplay | Ad rank as display text | 3 |
 | Weekly Search Volume | weeklySearchVolume | Estimated weekly searches for this keyword | 125000 |
 | Keyword Popularity Rank | keywordPopularityRank | Keyword's search volume rank among all keywords (lower = more popular) | 203 |
+| Total Search Result Products | totalSearchResultProductCount | Total products shown under this keyword (organic + ads + recommendations) | 1280 |
 | Traffic Share | trafficShare | Share of traffic this keyword contributes to the ASIN (1 = 100%) | 0.05 |
+| Natural Traffic Share | naturalTrafficShare | Organic exposure score / total score | 0.62 |
+| Paid Traffic Share | paidTrafficShare | Paid-ad exposure score / total score (SP + SB + SBV + recAd) | 0.31 |
+| Natural Traffic Score | naturalTrafficScore | Organic search exposure score for this ASIN on this keyword (0 = none) | 4.2 |
+| SP Ads Score | sponsoredProductsScore | Sponsored Products regular-slot score (excludes SP recommendation slots) | 2.1 |
+| Brand Ad (SB) Score | brandAdScore | Sponsored Brands total score (standard + video) | 0.8 |
+| Video Ad (SBV) Score | videoAdScore | Sponsored Brands Video score | 0.3 |
+| SP Recommendation Score | sponsoredRecommendationScore | Combined score across SP recommendation slots (Trending now, Seen on social media, Customers frequently viewed, 4 stars and above, etc.) | 1.4 |
+| SP Recommendation Breakdown | sponsoredRecommendationBreakdown | Array of `{title, score, scoreRatio}` per SP recommendation slot | [{"title":"Trending now","score":0.8,"scoreRatio":0.57}] |
+| ABA TOP3 Click Concentration | clickConcentrationShare | Whether clicks under this keyword concentrate on the top ASINs (NOT a conversion rate) | 0.42 |
+| Click-to-Purchase Conversion | clickToPurchaseConversionRate | `purchaseQty / clickQty` at the keyword level | 0.037 |
 | Display Position Types | displayPositionTypes | Where the product appears: natural, ac, sp, top, bottom, er, vedio, tr, trfob | ["natural", "sp"] |
 | Traffic Characteristic Markers | trafficCharacteristicMarkers | Traffic feature tags: isMainKw, isAccurateKw, isAccurateAboveKw, isAccurateTailKw | ["isMainKw"] |
 | Conversion Performance Markers | conversionPerformanceMarkers | Conversion tags: isPurchaseKw, isQualityKw, isStableKw, isLossKw, isInvalidKw | ["isPurchaseKw"] |
-| Last Organic Rank Time | lastNaturalRankTime | When the product last had a valid organic rank for this keyword | 2025-03-20 |
-| Last Ad Rank Time | lastAdRankTime | When the product last had a valid SP ad rank for this keyword | 2025-03-20 |
-| Update Time | updateTime | When the keyword data was last updated | 2025-03-21 |
+| Last Organic Rank Time | lastNaturalRankTime | When the product last had a valid organic rank for this keyword | 2026-04-20 |
+| Last Ad Rank Time | lastAdRankTime | When the product last had a valid SP ad rank for this keyword | 2026-04-20 |
+| Period End Date | periodEndDate | End date of the current (weekly) period = start-week + 7 days | 2026-04-27 |
+| Update Time | updateTime | When the keyword data was last updated | 2026-04-21 |
+
+### Top-level response fields (alongside `data`)
+
+| Field | API Name | Description |
+|-------|----------|-------------|
+| Is Parent ASIN | isParentAsin | Whether the queried ASIN is a parent (variation hub) |
+| Has Variants | hasVaiants | Whether the ASIN has variants |
+| Latest ABA Week | abaCreateDateWeek | Latest ABA weekly data reference date |
 
 ## Supported Marketplaces
 
-US (United States), CA (Canada), MX (Mexico), UK (United Kingdom), DE (Germany), FR (France), IT (Italy), ES (Spain), JP (Japan), IN (India), AU (Australia), BR (Brazil), NL (Netherlands), SE (Sweden), PL (Poland), TR (Turkey), AE (United Arab Emirates), SA (Saudi Arabia), SG (Singapore)
+13 marketplaces: US (United States), UK (United Kingdom), DE (Germany), CA (Canada), JP (Japan), FR (France), ES (Spain), IT (Italy), MX (Mexico), AU (Australia), AE (United Arab Emirates), BR (Brazil), SA (Saudi Arabia).
 
-Default marketplace is **US**. Use US when the user does not specify a marketplace.
+Default marketplace is **US**. Use US when the user does not specify a marketplace. Codes outside this list will be rejected by the API pattern.
 
 ## API Usage
 
@@ -55,23 +78,38 @@ This tool calls the LinkFox tool gateway API. See `references/api.md` for callin
 
 - **country** (string, default `US`): Marketplace code. See Supported Marketplaces above.
 - **keyword** (string): Filter results to keywords containing this text. Translate the keyword into the language of the target marketplace when possible.
-- **conditions** (string): Comma-separated condition filters. Available values:
+- **timePieceType** (string, default `latelyDay`): Time window type — `latelyDay` (most recent N days), `month` (specific month), `week` (specific week).
+- **timePieceValue** (string, default `7`): Value paired with `timePieceType`.
+  - When `timePieceType=latelyDay` → only `7` or `30` are supported
+  - When `timePieceType=month` → `YYYY-MM` (e.g. `2026-04`)
+  - When `timePieceType=week` → the week's start date `YYYY-MM-DD` (e.g. `2026-04-13`)
+- **conditions** (string): Comma-separated condition filters. Flag-style filters:
   - `nfPosition` -- organic traffic keywords
   - `isSpAd` -- SP ad keywords
   - `isBrandAd` -- brand ad keywords
   - `isVedioAd` -- video ad keywords
   - `isAC` -- Amazon's Choice keywords
-  - `isER` -- Editorial Recommendations keywords
-  - `isTr` -- Top Rated keywords
-  - `isMainKw` -- main traffic keywords
   - `isAccurateKw` -- precise traffic keywords
-  - `isAccurateAboveKw` -- precise high-volume keywords
   - `isAccurateTailKw` -- precise long-tail keywords
   - `isPurchaseKw` -- purchase-converting keywords
   - `isQualityKw` -- high-quality conversion keywords
   - `isStableKw` -- stable conversion keywords
   - `isLossKw` -- conversion-loss keywords
   - `isInvalidKw` -- invalid-exposure keywords
+  - `isMultiVariantKw` -- keywords ranking organically across multiple variants
+  - `isSearchVolUpKw` -- keywords whose search volume increased year-over-year
+  - `isSearchVolDownKw` -- keywords whose search volume decreased year-over-year
+
+  Period-count filters (all / new-in):
+  - `totalPeriod.in` -- newly-entered traffic keywords this period
+  - `nfKeywordCnt.total` / `nfKeywordCnt.in` -- keywords with (new) organic exposure
+  - `adKeywordCnt.total` / `adKeywordCnt.in` -- keywords with (new) ad exposure
+  - `allSpKeywordCnt.total` / `allSpKeywordCnt.in` -- (new) SP-ad keywords (regular + recommendation)
+  - `spKeywordCnt.total` / `spKeywordCnt.in` -- (new) SP regular keywords
+  - `recSpKeywordCnt.total` / `recSpKeywordCnt.in` -- (new) SP recommendation keywords
+  - `allSbKeywordCnt.total` / `allSbKeywordCnt.in` -- (new) SB-ad keywords
+  - `sbKeywordCnt.total` / `sbKeywordCnt.in` -- (new) SB regular keywords
+  - `sbvKeywordCnt.total` / `sbvKeywordCnt.in` -- (new) SBV keywords
 - **sortBy** (string): Sort field. Options: `lastRank` (organic rank), `adLastRank` (ad rank), `updateTime` (update time), `searchesRank` (search popularity rank), `estSearchesNum` (monthly search volume).
 - **desc** (boolean, default `true`): Sort in descending order. Set to `false` for ascending.
 - **pageNum** (integer, default `1`): Page number for pagination.
@@ -79,11 +117,12 @@ This tool calls the LinkFox tool gateway API. See `references/api.md` for callin
 
 ### Building Effective Queries
 
-1. **Always specify the marketplace**: Set `country` to the correct marketplace code.
-2. **Use keyword filtering**: When the user is interested in specific keywords, pass the `keyword` parameter to narrow results.
-3. **Apply condition filters**: Use `conditions` to focus on specific keyword types (e.g., only organic keywords, only purchase-converting keywords).
-4. **Choose appropriate sorting**: Sort by `estSearchesNum` for highest search volume keywords, or by `lastRank` for best-ranking keywords.
-5. **Handle pagination**: The API returns at most 100 results per page. Use `pageNum` to retrieve additional pages if the total exceeds 100.
+1. **Always specify the marketplace**: Set `country` to one of the 13 supported codes.
+2. **Pick the right time window**: The default is the latest 7 days. Pass `timePieceType=month` + `timePieceValue=YYYY-MM` for a specific month, or `timePieceType=week` + `timePieceValue=YYYY-MM-DD` for a specific ABA week.
+3. **Use keyword filtering**: When the user is interested in specific keywords, pass the `keyword` parameter to narrow results.
+4. **Apply condition filters**: Use `conditions` to focus on specific keyword types (e.g., only organic keywords, only purchase-converting keywords, or newly-entered SP keywords via `spKeywordCnt.in`).
+5. **Choose appropriate sorting**: Sort by `estSearchesNum` for highest search volume keywords, or by `lastRank` for best-ranking keywords.
+6. **Handle pagination**: The API returns at most 100 results per page. Use `pageNum` to retrieve additional pages if the total exceeds 100.
 
 ## Usage Examples
 
@@ -102,9 +141,9 @@ asin: "B0XXXXXXXX", country: "US", conditions: "nfPosition"
 asin: "B0XXXXXXXX", country: "US", keyword: "charger", sortBy: "estSearchesNum", desc: false
 ```
 
-**4. Find main traffic keywords that are converting (purchase keywords)**
+**4. Find high-converting keywords**
 ```
-asin: "B0XXXXXXXX", country: "US", conditions: "isMainKw,isPurchaseKw"
+asin: "B0XXXXXXXX", country: "US", conditions: "isPurchaseKw,isQualityKw"
 ```
 
 **5. Find SP ad keywords on the Japan marketplace**
@@ -112,25 +151,39 @@ asin: "B0XXXXXXXX", country: "US", conditions: "isMainKw,isPurchaseKw"
 asin: "B0XXXXXXXX", country: "JP", conditions: "isSpAd", sortBy: "adLastRank", desc: false
 ```
 
-**6. Find precise long-tail keywords with high conversion**
+**6. Find precise long-tail keywords with stable conversion**
 ```
-asin: "B0XXXXXXXX", country: "US", conditions: "isAccurateTailKw,isQualityKw"
+asin: "B0XXXXXXXX", country: "US", conditions: "isAccurateTailKw,isStableKw"
+```
+
+**7. Find newly-entered SP traffic keywords in April 2026**
+```
+asin: "B0XXXXXXXX", country: "US", timePieceType: "month", timePieceValue: "2026-04", conditions: "spKeywordCnt.in"
+```
+
+**8. Find keywords whose search volume is trending up**
+```
+asin: "B0XXXXXXXX", country: "US", conditions: "isSearchVolUpKw", sortBy: "estSearchesNum", desc: true
 ```
 
 ## Display Rules
 
 1. **Present data only**: Show query results in clear tables without subjective business advice.
 2. **Ranking clarification**: When showing ranking data, remind users that lower numeric values mean better (higher) positions.
-3. **Traffic share formatting**: Display traffic share as a percentage (multiply by 100). For example, 0.05 should be shown as 5%.
-4. **Marker translation**: Translate marker arrays into human-readable labels. For example, `["isMainKw", "isAccurateKw"]` should display as "Main Traffic, Precise Traffic".
-5. **Display position translation**: Translate position type arrays into readable labels: natural = Organic, ac = Amazon's Choice, sp = SP Ad, top = Top Brand Ad, bottom = Bottom Brand Ad, er = Editorial Recommendation, vedio = Video Ad, tr = Top Rated, trfob = Top Rated Frequently Bought.
-6. **Pagination notice**: When results have more pages, inform the user of the total count and suggest fetching additional pages.
-7. **Error handling**: When a query fails, explain the reason based on the `msg` field and suggest adjusting query parameters.
-8. **Multi-ASIN requests**: If the user asks about multiple ASINs, make separate API calls for each and present the results together.
+3. **Share formatting**: Display `trafficShare`, `naturalTrafficShare`, `paidTrafficShare`, and `clickConcentrationShare` as percentages (multiply by 100). For example, 0.05 should be shown as 5%.
+4. **Click concentration wording**: `clickConcentrationShare` measures how concentrated clicks are on top ASINs under the keyword — it is NOT a conversion rate. Label it clearly so users don't confuse it with `clickToPurchaseConversionRate`.
+5. **Period disclosure**: When showing counts sourced from `*.in`/`*.total` filters or comparing numbers, annotate the period range — default is last 7 days; if `timePieceType=month` or `week` is set, surface the resolved period (`periodEndDate` / `abaCreateDateWeek`).
+6. **Marker translation**: Translate marker arrays into human-readable labels. For example, `["isMainKw", "isAccurateKw"]` should display as "Main Traffic, Precise Traffic".
+7. **Display position translation**: Translate position type arrays into readable labels: natural = Organic, ac = Amazon's Choice, sp = SP Ad, top = Top Brand Ad, bottom = Bottom Brand Ad, er = Editorial Recommendation, vedio = Video Ad, tr = Top Rated, trfob = Top Rated Frequently Bought.
+8. **Pagination notice**: When results have more pages, inform the user of the total count and suggest fetching additional pages.
+9. **Error handling**: When a query fails, explain the reason based on the `msg` field and suggest adjusting query parameters.
+10. **Multi-ASIN requests**: If the user asks about multiple ASINs, make separate API calls for each and present the results together.
 ## Important Limitations
 
 - **Single ASIN per request**: Only one ASIN can be queried at a time.
 - **Page size cap**: Maximum 100 results per page.
+- **Time window granularity**: `timePieceType=latelyDay` only supports `timePieceValue=7` or `30`; arbitrary N-day windows are not supported.
+- **Marketplace coverage**: 13 marketplaces only — IN / NL / SE / PL / TR / SG are no longer available.
 - **Keyword language**: The `keyword` filter should ideally be in the language of the target marketplace.
 
 ## User Expression & Scenario Quick Reference
@@ -148,6 +201,10 @@ asin: "B0XXXXXXXX", country: "US", conditions: "isAccurateTailKw,isQualityKw"
 | "Show me keywords with lost conversions" | Conversion loss diagnosis |
 | "Which keywords have Amazon's Choice badge" | AC keyword discovery |
 | "Compare keyword rankings for my ASIN" | Keyword position analysis |
+| "Which new SP keywords did this ASIN get last month" | New-in period keyword discovery (`spKeywordCnt.in` + month window) |
+| "Keywords whose search volume is trending up YoY" | Search-volume trend filter (`isSearchVolUpKw`) |
+| "Is click concentration high on this keyword" | ABA TOP3 click concentration read |
+| "Keyword click-to-purchase conversion" | Per-keyword conversion check |
 
 **Not applicable** -- Needs beyond single-ASIN keyword lookup:
 - Broad keyword research not tied to a specific ASIN (use ABA data tools instead)

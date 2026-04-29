@@ -12,11 +12,16 @@ POST Body（JSON）：
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| searchKeyword | string | 是 | 搜索关键词，尽量翻译成对应国家站点的语言。最大长度1000字符 |
-| country | string | 否 | 国家站点，默认 `US`。可选值：US、CA、MX、UK、DE、FR、IT、ES、JP、IN、AU、BR、NL、SE、PL、TR、AE、SA、SG |
-| condition | string | 否 | 条件筛选，每次只能传一个。可选值：`nfPosition`（自然流量词）、`isSpAd`（SP广告词）、`isTopAd`（顶部品牌广告词）、`isBottomAd`（底部品牌广告词）、`isVedioAd`（视频广告词）、`isAC`（AC词）、`isER`（ER词）、`isTR`（TR词）、`isTRFOB`（TRFOB词）、`isBrandAd`（品牌广告词）、`isPPCAd`（PPC广告词）、`isSearchRecommend`（搜索推荐词） |
+| searchKeyword | string | 是 | 搜索关键词，尽量翻译成对应国家站点的语言。最大长度 1000 字符 |
+| country | string | 否 | 国家站点，默认 `US`。可选值（共 13 个）：`US`、`UK`、`DE`、`CA`、`JP`、`FR`、`ES`、`IT`、`MX`、`AU`、`AE`、`BR`、`SA` |
+| asins | string | 否 | ASIN 过滤列表，多个用英文逗号分隔；不传则返回该关键词下所有 ASIN。最大长度 1000 字符 |
+| condition | string | 否 | 条件筛选，每次只能传一个。<br>**标志类**：`nfPosition`（自然流量词）、`isSpAd`（SP广告词）、`isVedioAd`（视频广告词）、`isBrandAd`（品牌广告词）、`isPPCAd`（PPC广告词）、`isSearchRecommend`（搜索推荐词）、`acAd`（SP 推荐）<br>**周期计数类**：`totalPeriod.in`（新进全部流量词）、`nfKeywordCnt.total` / `.in`、`adKeywordCnt.total` / `.in`、`allSpKeywordCnt.total` / `.in`、`spKeywordCnt.total` / `.in`、`recSpKeywordCnt.total` / `.in`、`allSbKeywordCnt.total` / `.in`、`sbKeywordCnt.total` / `.in`、`sbvKeywordCnt.total` / `.in` |
+| last7d | boolean | 否 | 是否取最近 7 天数据，默认 `true`。传 `false` 时使用 `startDate`/`endDate` 区间 |
+| startDate | string | 否 | 开始日期 `yyyy-MM-dd`（`last7d=false` 时生效；不填取系统最新整周） |
+| endDate | string | 否 | 结束日期 `yyyy-MM-dd`（与 `startDate` 配套） |
+| sortBy | string | 否 | 排序字段。可选值：`totalKeywordNum`（全部流量词）、`naturalKeywordNum`（自然流量词）、`brandKeywordNum`（品牌广告词）、`vedioKeywordNum`（视频广告词）、`acKeywordNum`（AC推荐词）、`erKeywordNum`（ER推荐词）、`trKeywordNum`（TR推荐词）、`sumScore`（所有关键词曝光总得分）、`totalNfScore`、`totalSpSocre`（注意拼写）、`totalBrandScore`、`totalVedioScore`、`totalAcScore`、`totalTrScore`、`totalErScore` |
 | pageNum | integer | 否 | 页码，默认 `1` |
-| pageSize | integer | 否 | 每页数量，最小10，最大100，默认 `100` |
+| pageSize | integer | 否 | 每页数量，最小 10，最大 100，默认 `100` |
 | desc | boolean | 否 | 是否降序，默认 `true` |
 
 
@@ -33,56 +38,65 @@ POST Body（JSON）：
 | columns | array | 渲染的列 |
 | type | string | 渲染的样式 |
 | title | string | 标题 |
-| isParentAsin | boolean | 搜索的是否是父ASIN |
-| variantsNum | integer | 有关键词的变体商品数量 |
-| noKeywordVariantsNum | integer | 无关键词的变体商品数量 |
 | costTime | integer | 耗时（ms） |
 | costToken | integer | 消耗token |
 
+> 本接口不返回 `isParentAsin`、`variantsNum`、`noKeywordVariantsNum`；如需这些字段请使用 `sif/asinSummary` 接口。
+
 ### 数据项字段（`data` 数组中的每个对象）
+
+> 两类得分：无前缀字段（如 `naturalSearchExposureScore`）为该 ASIN 在所有关键词上的商品级整体指标；`keyword*` 前缀字段（如 `keywordNaturalExposureScore`）为该 ASIN 仅在本次查询的关键词上的指标。
 
 | 字段 | 类型 | 说明 |
 |------|------|------|
-| asin | string | ASIN编码。亚马逊商品标准识别码（Amazon Standard Identification Number） |
-| productTitle | string | 商品标题。亚马逊页面显示的完整商品标题 |
-| productCategory | string | 商品类目。该商品在亚马逊上所属的行业类目 |
-| productPrice | number | 商品售价。当前亚马逊页面显示的商品价格 |
-| productImageUrl | string | 商品主图URL。商品在亚马逊页面上的主要展示图片链接 |
-| productFeatures | array | 商品特征列表。商品在亚马逊页面上列出的主要特性和卖点 |
-| customerRatingCount | integer | 客户评分总数。该商品在亚马逊上获得的客户评分总数 |
-| isVariantProduct | boolean | 是否为变体。true=该ASIN是父ASIN下的变体（如不同颜色、尺寸），false=独立ASIN或父ASIN |
-| isMonitored | boolean | 是否已监控。true=该商品在监控列表中，false=未监控 |
-| monitoringStartTime | string | 商品关注时间。该商品被添加到监控系统的时间 |
-| totalTrafficKeywordCount | integer | 流量关键词总数。该商品在所有渠道（自然搜索+各类广告位+推荐位）被发现的关键词总数 |
-| totalExposureScore | number | 总曝光分数。该商品在所有关键词下的曝光量综合评分，分数越高表示整体曝光量越大 |
-| naturalSearchKeywordCount | integer | 自然搜索关键词数量。该商品在自然搜索结果中被发现的关键词总数（不包括广告位） |
-| naturalSearchExposureScore | number | 自然搜索曝光总分。该商品在自然搜索结果位置的曝光量综合评分 |
-| naturalSearchExposureRatio | number | 自然搜索曝光占比。自然搜索曝光分数占总曝光分数的百分比，反映自然流量的比重 |
-| naturalSearchTrafficSources | array | 自然搜索流量来源标记。如果该数组不为空，表示商品有自然搜索流量。数组内容标记具体的自然搜索类型 |
-| sponsoredProductsKeywordCount | integer | SP广告关键词数量。该商品在Sponsored Products（赞助商品）广告位展示的关键词总数 |
-| sponsoredProductsExposureScore | number | SP广告曝光总分。该商品在SP广告位的曝光量综合评分 |
-| sponsoredProductsExposureRatio | number | SP广告曝光占比。SP广告曝光分数占总曝光分数的百分比，反映付费广告流量的比重 |
-| brandAdKeywordCount | integer | 品牌广告关键词总数。该商品在品牌广告位（包括页面顶部和底部）展示的关键词总数 |
-| brandAdExposureScore | number | 品牌广告曝光总分。该商品在品牌广告位的曝光量综合评分 |
-| brandAdExposureRatio | number | 品牌广告曝光占比。品牌广告曝光分数占总曝光分数的百分比 |
-| topBrandAdKeywordCount | integer | 页面顶部品牌广告关键词数量。该商品在搜索结果页面顶部品牌广告位展示的关键词总数 |
-| bottomBrandAdKeywordCount | integer | 页面底部品牌广告关键词数量。该商品在搜索结果页面底部品牌广告位展示的关键词总数 |
-| videoAdKeywordCount | integer | 视频广告关键词数量。该商品在视频广告位展示的关键词总数 |
-| videoAdExposureScore | number | 视频广告曝光总分。该商品在视频广告位的曝光量综合评分 |
-| videoAdExposureRatio | number | 视频广告曝光占比。视频广告曝光分数占总曝光分数的百分比 |
-| amazonsChoiceKeywordCount | integer | Amazon's Choice关键词数量。该商品获得Amazon's Choice（亚马逊精选）推荐标志的关键词总数 |
-| amazonsChoiceExposureScore | number | Amazon's Choice曝光总分。该商品作为AC推荐商品的曝光量综合评分 |
-| amazonsChoiceExposureRatio | number | Amazon's Choice曝光占比。AC推荐曝光分数占总曝光分数的百分比 |
-| editorialRecommendationsKeywordCount | integer | Editorial Recommendations关键词数量。该商品在编辑推荐位展示的关键词总数 |
-| editorialRecommendationsExposureScore | number | Editorial Recommendations曝光总分。该商品在编辑推荐位的曝光量综合评分 |
-| editorialRecommendationsExposureRatio | number | Editorial Recommendations曝光占比。ER推荐曝光分数占总曝光分数的百分比 |
-| topRatedKeywordCount | integer | Top Rated推荐关键词数量。该商品在高评分推荐位展示的关键词总数 |
-| topRatedExposureScore | number | Top Rated推荐曝光总分。该商品在TR推荐位的曝光量综合评分 |
-| topRatedExposureRatio | number | Top Rated推荐曝光占比。TR推荐曝光分数占总曝光分数的百分比 |
-| frequentlyBoughtKeywordCount | integer | 高频购买推荐关键词数量。该商品在Top Rated Frequently Bought（高评分高频购买）推荐位展示的关键词总数 |
-| ppcTrafficSources | array | PPC付费广告流量来源标记。包含：SP广告（Sponsored Products）、头部品牌广告（Top Brand Ad）、底部品牌广告（Bottom Brand Ad）、视频广告（Video Ad） |
-| amazonRecommendationSources | array | 亚马逊推荐流量来源标记。包含：Best Seller榜单、Amazon's Choice推荐、编辑推荐（ER）、高评分推荐（TR）、高频购买推荐（TRFOB）等 |
-| promotionalDealSources | array | 促销活动流量来源标记。包含：优惠券（Coupon）、限时优惠（Limited Time Deal）、30天内最低价（Lowest Price in 30 Days）等 |
+| asin | string | ASIN 编码 |
+| productTitle | string | 商品标题 |
+| productImageUrl | string | 商品主图 URL |
+| productPrice | number | 商品售价 |
+| customerRatingCount | integer | 客户评分总数 |
+| productStarRating | number | 商品星级（0–5 星） |
+| productRatingScore | number | 商品评分数值 |
+| productUpdateTime | string | 产品更新时间（`yyyy-MM-dd HH:mm:ss`） |
+| dataPeriodStartDate | string | 数据周期起始日期（`yyyy-MM-dd`） |
+| totalExposureScore | number | 总曝光分数 |
+| totalExposureRatio | number | 总流量份额 |
+| naturalSearchExposureScore | number | 自然搜索曝光总分 |
+| naturalSearchExposureRatio | number | 自然搜索曝光占比 |
+| sponsoredProductsExposureScore | number | SP 广告曝光总分 |
+| sponsoredProductsExposureRatio | number | SP 广告曝光占比 |
+| brandAdExposureScore | number | 品牌广告曝光总分 |
+| brandAdExposureRatio | number | 品牌广告曝光占比 |
+| videoAdExposureScore | number | 视频广告曝光总分 |
+| videoAdExposureRatio | number | 视频广告曝光占比 |
+| amazonsChoiceExposureScore | number | AC 曝光总分 |
+| amazonsChoiceExposureRatio | number | AC 曝光占比 |
+| editorialRecommendationsExposureScore | number | ER 曝光总分 |
+| editorialRecommendationsExposureRatio | number | ER 曝光占比 |
+| topRatedExposureScore | number | TR 曝光总分 |
+| topRatedExposureRatio | number | TR 曝光占比 |
+| recommendPositionExposureScore | number | 推荐位曝光总分 |
+| recommendAdExposureScore | number | 推荐位广告曝光分数 |
+| recommendAdExposureRatio | number | 推荐位广告流量份额 |
+| recommendNonadExposureScore | number | 推荐位非广告曝光分数 |
+| recommendNonadExposureRatio | number | 推荐位非广告流量份额 |
+| comprehensiveNaturalExposureScore | number | 综合自然流量得分（自然搜索 + 推荐位非广告） |
+| comprehensiveNaturalExposureRatio | number | 综合自然流量份额 |
+| keywordTotalExposureScore | number | 关键词总得分 |
+| keywordNaturalExposureScore | number | 关键词自然得分 |
+| keywordSponsoredProductsExposureScore | number | 关键词 SP 广告得分 |
+| keywordBrandAdExposureScore | number | 关键词品牌广告得分 |
+| keywordVideoAdExposureScore | number | 关键词视频广告得分 |
+| keywordAmazonsChoiceExposureScore | number | 关键词 AC 得分 |
+| keywordRecommendExposureScore | number | 关键词推荐位得分 |
+| keywordRecommendAdExposureScore | number | 关键词推荐位广告得分 |
+| keywordRecommendNonadExposureScore | number | 关键词推荐位非广告得分 |
+| keywordComprehensiveNaturalExposureScore | number | 关键词综合自然得分（自然 + 推荐位非广告） |
+| ppcTrafficSources | array | PPC 付费广告流量来源标记。包含：SP 广告、头部品牌广告、底部品牌广告、视频广告 |
+| naturalSearchTrafficSources | array | 自然搜索流量来源标记 |
+| amazonRecommendationSources | array | 亚马逊推荐流量来源标记。包含：Best Seller、AC、ER、TR、TRFOB 等 |
+| promotionalDealSources | array | 促销活动流量来源标记。包含：Coupon、Limited Time Deal、Lowest Price in 30 Days 等 |
+
+> 本接口不返回以下字段：`productCategory`、`productFeatures`、`isVariantProduct`、`isMonitored`、`monitoringStartTime`，以及 per-ASIN 的 `totalTrafficKeywordCount`、`naturalSearchKeywordCount`、`sponsoredProductsKeywordCount`、`brandAdKeywordCount`、`topBrandAdKeywordCount`、`bottomBrandAdKeywordCount`、`videoAdKeywordCount`、`amazonsChoiceKeywordCount`、`editorialRecommendationsKeywordCount`、`topRatedKeywordCount`、`frequentlyBoughtKeywordCount`。如需这些字段，请使用 `sif/asinSummary` 接口。
 
 ## 错误码
 
@@ -119,6 +133,24 @@ curl -X POST https://tool-gateway.linkfox.com/sif/keywordSummary \
   -H "Authorization: $LINKFOXAGENT_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"searchKeyword": "wireless charger", "country": "US", "condition": "isSpAd"}'
+```
+
+### 按 ASIN 过滤 + 指定日期区间：
+
+```bash
+curl -X POST https://tool-gateway.linkfox.com/sif/keywordSummary \
+  -H "Authorization: $LINKFOXAGENT_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"searchKeyword": "wireless charger", "country": "US", "asins": "B01NBNDC1T,B09VLJJPL6", "last7d": false, "startDate": "2026-04-05", "endDate": "2026-04-11"}'
+```
+
+### 按 SP 曝光得分排序：
+
+```bash
+curl -X POST https://tool-gateway.linkfox.com/sif/keywordSummary \
+  -H "Authorization: $LINKFOXAGENT_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"searchKeyword": "wireless charger", "country": "US", "sortBy": "totalSpSocre", "desc": true}'
 ```
 
 ### 带分页参数：
