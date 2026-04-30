@@ -63,8 +63,8 @@ Get your API key and configure the environment before using any skill.
 | `linkfox-amazon-reviews` | Retrieve and analyze Amazon product reviews |
 | `linkfox-amazon-search` | Search Amazon products by keyword with real-time ranking data |
 | `linkfox-amazon-search-by-image` | Find similar Amazon products using image-based search |
-| `linkfox-amazon-spapi-auth` | Amazon Spapi Auth |
-| `linkfox-amazon-spapi-report` | Amazon Spapi Report |
+| `linkfox-amazon-store-auth` | Amazon Store Auth |
+| `linkfox-amazon-store-report` | Amazon Store Report |
 
 ### 1688
 
@@ -225,6 +225,7 @@ Get your API key and configure the environment before using any skill.
 
 | Skill | Description |
 | --- | --- |
+| `linkfox-lingxing-erp` | Lingxing Erp |
 | `linkfox-product-title-analyze` | Analyze and optimize Amazon product listing titles |
 | `linkfox-tsearch-web-search` | Search the web for market research and trending topics |
 | `linkfox-wallysmarter-product-detail` | Walmart product detail with historical pricing and sales trends via WallySmarter |
