@@ -1,5 +1,7 @@
 ---
 name: linkfox-sellersprite-market-research
+version: 1.0.1
+category: product-sourcing
 description: 使用卖家精灵选市场列表能力，基于类目维度筛选亚马逊细分市场，支持市场规模、竞争度、头部集中度、卖家结构、新品占比、价格/评分/毛利区间等大量条件，用于发现可进入市场与评估选品方向。当用户提到亚马逊市场调研、细分类目研究、市场机会筛选、市场集中度分析、新品机会、选市场、SellerSprite market research、category market research时触发此技能。即使用户未明确提及"卖家精灵"，只要需求是按类目维度筛选和评估亚马逊市场，也应触发此技能。
 ---
 
@@ -18,12 +20,12 @@ This skill helps screen and rank Amazon category markets using SellerSprite mark
 
 - Endpoint: `POST https://tool-gateway.linkfox.com/sellersprite/market/research`
 - Auth: Header `Authorization: <api_key>` (`LINKFOXAGENT_API_KEY`)
-- See full details in `references/api.md`.
+- 完整说明见 `references/api.md`：含 `marketplace` / `month` / `orderField` 枚举，`sellerLocation`/`newProduct`/`topNum`，以及集中度、新品、头部、重量体积等全部筛选入参；响应含顶层字段与 `data[]` 类目市场指标、`top10Images[]` 等。
 - Runnable script: `scripts/sellersprite_market_research.py`
 
 ## Key Parameters
 
-> 该接口支持大量筛选项（70+），以下为高频参数；完整说明见 `references/api.md`。
+> 接口筛选项与工具 `_sellersprite_market_research` 一致（70+）；下表为常用子集，**完整参数与出参字段见 `references/api.md`**。
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
@@ -32,7 +34,7 @@ This skill helps screen and rank Amazon category markets using SellerSprite mark
 | nodeIdPath | string | 否 | 类目节点路径 |
 | departmentKeyword | string | 否 | 类目关键字路径 |
 | page / size | integer | 否 | 分页，默认 1/50，`size` 最大 200 |
-| orderField / orderDesc | string/boolean | 否 | 排序字段与方向 |
+| orderField / orderDesc | string/boolean | 否 | 排序字段与方向；`orderDesc` 默认 `true`（降序） |
 | minAvgRevenue / maxAvgRevenue | number | 否 | 月均销售额范围 |
 | minAvgUnits / maxAvgUnits | integer | 否 | 月均销量范围 |
 | minGoodsCount / maxGoodsCount | integer | 否 | 商品数量范围 |

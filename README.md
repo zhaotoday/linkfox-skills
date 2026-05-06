@@ -99,6 +99,17 @@ Get your API key and configure the environment before using any skill.
 | `linkfox-fastmoss-product-search` | Search TikTok products with keyword, category, sales, and creator filters |
 | `linkfox-fastmoss-top-selling` | Browse TikTok top-selling product rankings by day, week, or month |
 
+### Ozon (Mpstats)
+
+| Skill | Description |
+| --- | --- |
+| `linkfox-mpstats-ozon-brand-products` | Drill into all Ozon SKUs under a brand with filters, sorting, and currency conversion via MPSTATS |
+| `linkfox-mpstats-ozon-category-products` | Drill into all Ozon SKUs under a Russian category path with filters for niche mining via MPSTATS |
+| `linkfox-mpstats-ozon-product-detail` | Batch-fetch full Ozon product card (price, sales, stock, rating, lost profit) for up to 100 SKUs via MPSTATS |
+| `linkfox-mpstats-ozon-product-search` | Search Ozon (Russia) products by Russian keyword, SKU list, brand, or seller - the MPSTATS Ozon discovery entry point |
+| `linkfox-mpstats-ozon-product-trend` | Daily time-series for a single Ozon SKU (sales, price, stock, optional search visibility) via MPSTATS |
+| `linkfox-mpstats-ozon-seller-products` | Drill into all Ozon SKUs under a seller ID for shop structure audits via MPSTATS |
+
 ### Google Trends
 
 | Skill | Description |
@@ -226,12 +237,6 @@ Get your API key and configure the environment before using any skill.
 | Skill | Description |
 | --- | --- |
 | `linkfox-lingxing-erp` | Lingxing Erp |
-| `linkfox-mpstats-ozon-brand-products` | Drill into all Ozon SKUs under a brand with filters, sorting, and currency conversion via MPSTATS |
-| `linkfox-mpstats-ozon-category-products` | Drill into all Ozon SKUs under a Russian category path with filters for niche mining via MPSTATS |
-| `linkfox-mpstats-ozon-product-detail` | Batch-fetch full Ozon product card (price, sales, stock, rating, lost profit) for up to 100 SKUs via MPSTATS |
-| `linkfox-mpstats-ozon-product-search` | Search Ozon (Russia) products by Russian keyword, SKU list, brand, or seller - the MPSTATS Ozon discovery entry point |
-| `linkfox-mpstats-ozon-product-trend` | Daily time-series for a single Ozon SKU (sales, price, stock, optional search visibility) via MPSTATS |
-| `linkfox-mpstats-ozon-seller-products` | Drill into all Ozon SKUs under a seller ID for shop structure audits via MPSTATS |
 | `linkfox-product-title-analyze` | Analyze and optimize Amazon product listing titles |
 | `linkfox-tsearch-web-search` | Search the web for market research and trending topics |
 | `linkfox-wallysmarter-product-detail` | Walmart product detail with historical pricing and sales trends via WallySmarter |

@@ -1,7 +1,5 @@
 ---
 name: linkfox-mpstats-ozon-product-trend
-version: 1.0.0
-category: product-sourcing
 description: MPSTATS Ozon 俄罗斯站单个 SKU 的分日时间序列表现。按日期粒度返回一个 Ozon 商品的销量、价格、库存、评分等指标，可选附带搜索位次/可见性数据，用于验证增长趋势、季节性、异常波动。当用户提到 Ozon 趋势、Ozon 销量趋势、Ozon 价格走势、Ozon 分日数据、Ozon 库存走势、Ozon 搜索位次、Ozon 商品历史、MPSTATS trend, Ozon daily performance, Ozon time series, Ozon search visibility, Russian marketplace product history 时触发此技能。即使用户未明确说"MPSTATS"，只要意图是看某个 Ozon 商品的分日/时间段走势，也应触发此技能。
 ---
 
