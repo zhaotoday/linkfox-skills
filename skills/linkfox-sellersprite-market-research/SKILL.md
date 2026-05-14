@@ -1,5 +1,7 @@
 ---
 name: linkfox-sellersprite-market-research
+version: 1.0.2
+category: product-sourcing
 description: 使用卖家精灵选市场列表能力，基于类目维度筛选亚马逊细分市场，支持市场规模、竞争度、头部集中度、卖家结构、新品占比、价格/评分/毛利区间等大量条件，用于发现可进入市场与评估选品方向。当用户提到亚马逊市场调研、细分类目研究、市场机会筛选、市场集中度分析、新品机会、选市场、SellerSprite market research、category market research时触发此技能。即使用户未明确提及"卖家精灵"，只要需求是按类目维度筛选和评估亚马逊市场，也应触发此技能。
 ---
 
@@ -12,6 +14,7 @@ This skill helps screen and rank Amazon category markets using SellerSprite mark
 - **类目市场级分析**：不是商品级列表，而是按类目/节点聚合后的市场画像。
 - **市场规模**：月均销量、月均销售额、商品数量等。
 - **竞争结构**：卖家/品牌集中度、头部集中度、自营占比、FBA/FBM 占比。
+- **入参刻度**：筛选用的 **GoodsCrn / BrandCrn / SellerCrn / EbcProportion / FbaProportion / FbmProportion / AmazonSelfProportion**（`min*`/`max*`）须为 **0～1 小数**，见下文参数表与 `references/api.md`。
 - **新品机会**：新品数量、新品占比、新品均价/评分/销量等。
 
 ## API Usage
@@ -36,10 +39,14 @@ This skill helps screen and rank Amazon category markets using SellerSprite mark
 | minAvgRevenue / maxAvgRevenue | number | 否 | 月均销售额范围 |
 | minAvgUnits / maxAvgUnits | integer | 否 | 月均销量范围 |
 | minGoodsCount / maxGoodsCount | integer | 否 | 商品数量范围 |
-| minGoodsCrn / maxGoodsCrn | number | 否 | 商品集中度（%） |
-| minSellerCrn / maxSellerCrn | number | 否 | 卖家集中度（%） |
-| minBrandCrn / maxBrandCrn | number | 否 | 品牌集中度（%） |
-| minNewProportion / maxNewProportion | number | 否 | 新品占比（%） |
+| minGoodsCrn / maxGoodsCrn | number | 否 | 商品集中度（**小数 0～1**，如 `0.4` 表示 40%，勿用整数 `40`） |
+| minSellerCrn / maxSellerCrn | number | 否 | 卖家集中度（**小数 0～1**） |
+| minBrandCrn / maxBrandCrn | number | 否 | 品牌集中度（**小数 0～1**） |
+| minAmazonSelfProportion / maxAmazonSelfProportion | number | 否 | Amazon 自营占比（**小数 0～1**） |
+| minFbaProportion / maxFbaProportion | number | 否 | FBA 占比（**小数 0～1**） |
+| minFbmProportion / maxFbmProportion | number | 否 | FBM 占比（**小数 0～1**） |
+| minEbcProportion / maxEbcProportion | number | 否 | A+ 数量占比（**小数 0～1**） |
+| minNewProportion / maxNewProportion | number | 否 | 新品占比（刻度可能与上列不同，以 `references/api.md` / schema 为准） |
 | minAvgPrice / maxAvgPrice | number | 否 | 平均价格范围 |
 | minAvgRating / maxAvgRating | number | 否 | 平均评分范围 |
 | minAvgProfit / maxAvgProfit | number | 否 | 平均毛利率（%） |
@@ -51,9 +58,9 @@ This skill helps screen and rank Amazon category markets using SellerSprite mark
   "marketplace": "US",
   "month": "nearly",
   "minAvgRevenue": 10000,
-  "maxGoodsCrn": 40,
+  "maxGoodsCrn": 0.4,
   "minNewProportion": 10,
-  "maxSellerCrn": 50,
+  "maxSellerCrn": 0.5,
   "orderField": "total_amount",
   "orderDesc": true,
   "page": 1,
@@ -64,9 +71,10 @@ This skill helps screen and rank Amazon category markets using SellerSprite mark
 ## Display Rules
 
 1. 先给出市场候选 Top N，再展示核心指标（市场规模、集中度、新品占比）。
-2. 清晰标注单位：比例字段是 `%`，金额按站点币种。
-3. 显示筛选条件回显，便于用户复现。
-4. 若结果过少或过多，建议用户调整关键阈值（如集中度、规模阈值）。
+2. **入参回显**：`GoodsCrn` / `BrandCrn` / `SellerCrn` / `EbcProportion` / `FbaProportion` / `FbmProportion` / `AmazonSelfProportion` 对应筛选为 **0～1 小数**；向用户说明时可换算为百分数（如传 `0.4` 可表述为「商品集中度上限 40%」）。响应 `data[]` 里若仍带「(%)」字段，与入参刻度可能不同，以返回为准。
+3. 其它比例/毛利率等字段的单位以 `references/api.md` 为准。
+4. 显示筛选条件回显，便于用户复现。
+5. 若结果过少或过多，建议用户调整关键阈值（如集中度、规模阈值）。
 
 ## Important Limitations
 

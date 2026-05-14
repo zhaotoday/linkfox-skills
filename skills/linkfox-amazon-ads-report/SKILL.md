@@ -1,6 +1,8 @@
 ---
 name: linkfox-amazon-ads-report
-description: 亚马逊广告（Amazon Ads）报告一站式获取技能，覆盖 Sponsored Products (SP) / Sponsored Brands (SB) 全部报告类型。脚本自动完成报告的创建、等待、下载和解压，直接返回可读的结构化数据。真实可用的报告类型及每类的列清单/groupBy/filters 以 `references/report-types/<adProduct-dir>/<reportTypeId>.md` 为单一真相源。当用户提到拉取亚马逊广告报告、下载 Amazon Ads 报告、获取 SP/SB 广告活动/关键词/搜索词/投放商品/购买商品/广告组/流量异常/Prompt 扩展等任意报告时触发。本技能依赖 linkfox-amazon-ads-auth。Sponsored Display (SD) / Sponsored Television (ST) / Amazon DSP 暂未覆盖。
+version: 1.0.1
+category: product-sourcing
+description: 亚马逊广告（Amazon Ads）报告一站式获取技能，覆盖 Sponsored Products (SP) / Sponsored Brands (SB) / Sponsored Display (SD) 全部报告类型。脚本自动完成报告的创建、等待、下载和解压，直接返回可读的结构化数据。真实可用的报告类型及每类的列清单/groupBy/filters 以 `references/report-types/<adProduct-dir>/<reportTypeId>.md` 为单一真相源。当用户提到拉取亚马逊广告报告、下载 Amazon Ads 报告、获取 SP/SB/SD 广告活动/关键词/搜索词/投放商品/购买商品/广告组/流量异常/Prompt 扩展等任意报告时触发。本技能依赖 linkfox-amazon-ads-auth。Sponsored Television (ST) / Amazon DSP 暂未覆盖。
 ---
 
 # Amazon Ads 报告获取
@@ -26,7 +28,7 @@ description: 亚马逊广告（Amazon Ads）报告一站式获取技能，覆盖
 
 ## Core Concepts
 
-- **覆盖**：SP / SB 全部报告类型（以 `references/report-types/` 下存在的 `.md` 为准；SD / ST / DSP 暂未覆盖）
+- **覆盖**：SP / SB / SD 全部报告类型（以 `references/report-types/` 下存在的 `.md` 为准；ST / DSP 暂未覆盖）
 - **一站式**：脚本内部自动完成报告创建 → 等待生成（约 2–10 分钟）→ 下载 → 解压，调用方只需等最终结果
 - **单脚本**：`get_report.py`（覆盖 SP / SB 全部 adProduct）
 - **元数据 vs. 运行参数**：
@@ -116,7 +118,21 @@ python scripts/get_report.py '{
 }'
 ```
 
-### 4. 轮询一个已有 reportId（救回上次超时 / 手工恢复）
+### 4. SD 广告活动报告
+
+```bash
+python scripts/get_report.py '{
+  "profileId": 1234567890, "region": "NA",
+  "reportTypeId": "sdCampaigns",
+  "adProduct": "SPONSORED_DISPLAY",
+  "groupBy": ["campaign"],
+  "columns": ["date","campaignId","campaignName","impressions","clicks","cost","purchases","sales"],
+  "startDate": "2026-04-27","endDate": "2026-05-03",
+  "timeUnit": "DAILY"
+}'
+```
+
+### 5. 轮询一个已有 reportId（救回上次超时 / 手工恢复）
 
 当上次运行因为客户端轮询窗口太短退出、但报告在 Amazon 侧仍在跑时，直接传入 `reportId` 即可跳过创建，继续轮询并下载。此模式下只需 `profileId` / `region` / `reportId`，其余字段不必填。
 

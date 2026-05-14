@@ -5,8 +5,9 @@ All list_*.py scripts import from this module for:
   - Dependency check (linkfox-amazon-ads-auth must be installed)
   - LINKFOXAGENT_API_KEY retrieval
   - /amazonAds/storeTokens call to get access token
-  - /amazonAds/developerProxy call with SP v3 Content-Type
-  - nextToken-aware auto-pagination
+  - /amazonAds/developerProxy call with the right method / Content-Type per ad product
+  - Auto-pagination across Sponsored Products / Sponsored Brands (nextToken) and
+    Sponsored Display (startIndex + count offset)
 
 This module is NOT intended to be run directly; it is imported by list_*.py siblings.
 
@@ -16,6 +17,7 @@ Import convention (at top of each list_*.py):
     from pathlib import Path
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from _common import ensure_auth_skill_available, get_access_token, list_sp_entities
+    # or list_sd_entities for Sponsored Display
 """
 
 from __future__ import annotations
@@ -27,6 +29,7 @@ import sys
 from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
+from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 
@@ -264,13 +267,16 @@ def require_fields(params: dict, required: list[str]) -> None:
 # - "client_side" : 上游不支持，由本 skill 在拉回结果后本地过滤（asinFilter / skuFilter）
 FILTER_STRUCTURE: dict[str, str] = {
     # 对象型（include/exclude 列表）
-    "stateFilter":         "object",
-    "campaignIdFilter":    "object",
-    "adGroupIdFilter":     "object",
-    "keywordIdFilter":     "object",
-    "targetIdFilter":      "object",
-    "adIdFilter":          "object",
-    "portfolioIdFilter":   "object",
+    "stateFilter":              "object",
+    "campaignIdFilter":         "object",
+    "adGroupIdFilter":          "object",
+    "keywordIdFilter":          "object",
+    "targetIdFilter":           "object",
+    "negativeTargetIdFilter":   "object",  # SD negativeTargets
+    "negativeKeywordIdFilter":  "object",  # SP negativeKeywords
+    "creativeIdFilter":         "object",  # SD creatives
+    "adIdFilter":               "object",
+    "portfolioIdFilter":        "object",
     # 裸数组型
     "matchTypeFilter":     "array",
     # 注意：expressionTypeFilter 实证是 object-include 结构（与 matchTypeFilter 不同）
@@ -400,3 +406,211 @@ def apply_client_side_filters(items: list, client_filters: dict) -> list:
         wanted = set(values)
         filtered = [it for it in filtered if it.get(target_field) in wanted]
     return filtered
+
+
+# ---------- Sponsored Display (v3) 支持 ----------
+#
+# Sponsored Display v3 list endpoint 的形态：
+#   - 方法：GET，参数位于 querystring
+#   - 分页：startIndex + count 偏移分页
+#   - 过滤器：扁平字符串（id 类逗号分隔；state 类逗号分隔小写）
+#   - 扩展字段：通过路径区分（/sd/<entity> 与 /sd/<entity>/extended）
+#
+# 过滤字段统一接受 {"include":[...]} / 裸数组 / 单值字符串三种形态，转换为
+# Sponsored Display 端所需的 querystring：
+#   - build_sd_query()    将 *Filter 入参规范化为 querystring dict + 是否使用 /extended
+#   - list_sd_entities()  按 startIndex + count 循环 GET，直到本页 < count 或达 max_pages
+
+# *Filter 入参到 Sponsored Display querystring 字段的映射。
+SD_QUERY_ID_FIELDS: dict[str, str] = {
+    "campaignIdFilter":       "campaignIdFilter",
+    "adGroupIdFilter":        "adGroupIdFilter",
+    "adIdFilter":             "adIdFilter",
+    "targetIdFilter":         "targetIdFilter",
+    # /sd/negativeTargets querystring 不支持 negativeTargetIdFilter；保留映射避免
+    # 静默丢字段，传入时上游会返回 400 / 422 由用户感知。
+    "negativeTargetIdFilter": "negativeTargetIdFilter",
+    "portfolioIdFilter":      "portfolioIdFilter",
+    "creativeIdFilter":       "creativeIdFilter",
+}
+
+SD_STATE_FIELDS = ("stateFilter",)
+SD_NAME_FIELDS = ("nameFilter",)  # SD 上游字段名是 `name`（精确匹配）
+
+
+def _to_list(val) -> list:
+    """把 {"include":[...]} / 裸数组 / 标量 都归一化成一个 list（用于 SD querystring 拼接）。"""
+    if val is None:
+        return []
+    if isinstance(val, list):
+        return [str(x) for x in val if x is not None]
+    if isinstance(val, dict):
+        if isinstance(val.get("include"), list):
+            return [str(x) for x in val["include"] if x is not None]
+        return []
+    return [str(val)]
+
+
+def build_sd_query(params: dict, filter_keys: list[str]):
+    """将 *Filter 入参规范化为 Sponsored Display GET endpoint 所需的扁平 querystring。
+
+    返回 (query_dict, use_extended_path, client_filters)：
+      - query_dict     : {"stateFilter": "enabled,paused", "campaignIdFilter": "1,2", ...}
+      - use_extended_path : 传 includeExtendedDataFields=true 时为 True，否则 False
+      - client_filters : {"asinFilter": ["B0XX"], ...}（上游不支持的过滤字段，由调用方拉回后本地匹配）
+
+    规范化规则：
+      - state 类做 .lower()（Sponsored Display 接口端要求 `enabled` 而非 `ENABLED`）
+      - id 类合并为逗号分隔字符串
+      - nameFilter：Sponsored Display 仅支持精确匹配；若传 queryTermMatchType=BROAD_MATCH，
+        在 stderr 输出一次提示，并仅取 include[0] 作 `name` 参数
+      - asinFilter / skuFilter：Sponsored Display 端不支持，转为 client-side 过滤
+    """
+    query: dict[str, str] = {}
+    client_filters: dict[str, list] = {}
+
+    # 1) id 类（含 portfolio / creative / target / negativeTarget）
+    for key, sd_field in SD_QUERY_ID_FIELDS.items():
+        if key not in filter_keys or key not in params or params[key] is None:
+            continue
+        values = _to_list(params[key])
+        if values:
+            query[sd_field] = ",".join(values)
+
+    # 2) state 类（小写化）
+    for key in SD_STATE_FIELDS:
+        if key not in filter_keys or key not in params or params[key] is None:
+            continue
+        values = [str(v).lower() for v in _to_list(params[key])]
+        if values:
+            query[key] = ",".join(values)
+
+    # 3) name（精确匹配；SD 没有 BROAD_MATCH）
+    for key in SD_NAME_FIELDS:
+        if key not in filter_keys or key not in params or params[key] is None:
+            continue
+        val = params[key]
+        include: list = []
+        match_type = None
+        if isinstance(val, dict):
+            include = _to_list(val.get("include"))
+            match_type = val.get("queryTermMatchType")
+        else:
+            include = _to_list(val)
+        if match_type and match_type != "EXACT_MATCH":
+            print(
+                f"⚠️  Sponsored Display nameFilter 仅支持精确匹配；忽略 queryTermMatchType={match_type}，"
+                f"按 include[0]={include[0] if include else '(empty)'} 作 name 精确匹配。",
+                file=sys.stderr,
+            )
+        if include:
+            query["name"] = include[0]
+
+    # 4) client-side 过滤（asin / sku）
+    for fkey in ("asinFilter", "skuFilter"):
+        if fkey not in filter_keys or fkey not in params or params[fkey] is None:
+            continue
+        values = _to_list(params[fkey])
+        if values:
+            client_filters[fkey] = values
+
+    # 5) extended 路径开关
+    use_extended_path = bool(params.get("includeExtendedDataFields"))
+
+    return query, use_extended_path, client_filters
+
+
+def list_sd_entities(region: str, profile_id: int, access_token: str,
+                     entity_path: str,
+                     response_key: str,
+                     server_query: dict,
+                     fetch_all: bool = True,
+                     max_pages: int = DEFAULT_MAX_PAGES,
+                     page_size: int = DEFAULT_PAGE_SIZE) -> dict:
+    """GET 一个 Sponsored Display v3 list endpoint，并按 startIndex + count 自动翻页。
+
+    Sponsored Display 响应顶层是数组（非 `{<entityKey>:[...]}` 结构）；本函数对两种形态都兼容。
+    终止条件：本页返回长度 < count（已到最后一页），或累计 pages >= max_pages（兜底）。
+
+    返回结构：
+        {"items":[...], "pagesFetched":N, "truncated":bool}
+        或 {"error":..., "httpStatus":..., "body":..., "pagesFetched":...}
+    """
+    if page_size < 1:
+        page_size = DEFAULT_PAGE_SIZE
+    if page_size > 100:
+        page_size = 100
+
+    collected: list = []
+    start_index = 0
+    pages = 0
+    truncated = False
+
+    while True:
+        page_query = dict(server_query or {})
+        page_query["startIndex"] = str(start_index)
+        page_query["count"] = str(page_size)
+        qs = urlencode(page_query, doseq=False)
+
+        resp = _developer_proxy_call(
+            region=region,
+            path=entity_path,
+            method="GET",
+            access_token=access_token,
+            profile_id=profile_id,
+            body=None,
+            content_type=None,
+            query_string=qs,
+        )
+
+        if "error" in resp:
+            return {
+                "error": resp["error"],
+                "details": resp.get("details"),
+                "pagesFetched": pages,
+            }
+
+        http_status = resp.get("httpStatus")
+        if http_status is None or http_status // 100 != 2:
+            return {
+                "error": f"Upstream HTTP {http_status}",
+                "httpStatus": http_status,
+                "contentType": resp.get("contentType"),
+                "body": resp.get("body"),
+                "pagesFetched": pages,
+            }
+
+        try:
+            parsed = json.loads(resp.get("body") or "[]")
+        except Exception as e:
+            return {
+                "error": f"Failed to parse upstream body as JSON: {e}",
+                "body": resp.get("body"),
+                "pagesFetched": pages,
+            }
+
+        if isinstance(parsed, list):
+            page_items = parsed
+        elif isinstance(parsed, dict):
+            page_items = parsed.get(response_key) or []
+        else:
+            page_items = []
+
+        if isinstance(page_items, list):
+            collected.extend(page_items)
+
+        pages += 1
+        page_len = len(page_items) if isinstance(page_items, list) else 0
+
+        if not fetch_all or page_len < page_size:
+            break
+        if pages >= max_pages:
+            truncated = True
+            break
+        start_index += page_size
+
+    return {
+        "items": collected,
+        "pagesFetched": pages,
+        "truncated": truncated,
+    }

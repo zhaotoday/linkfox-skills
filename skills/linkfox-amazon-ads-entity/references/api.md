@@ -6,8 +6,9 @@
 |---------|-----------|---------|
 | **Sponsored Products (SP)** — v3 | `scripts/sp/` | [api/sp.md](./api/sp.md) |
 | **Sponsored Brands (SB)** — v4 | `scripts/sb/` | [api/sb.md](./api/sb.md) |
+| **Sponsored Display (SD)** — v3 | `scripts/sd/` | [api/sd.md](./api/sd.md) |
 
-> Sponsored Display (SD) / Sponsored Television (ST) / Amazon DSP 暂未覆盖。
+> Sponsored Television (ST) / Amazon DSP 暂未覆盖。
 
 ## 通用约定
 
@@ -15,16 +16,16 @@
 - 鉴权：环境变量 `LINKFOXAGENT_API_KEY`
 - 依赖 `linkfox-amazon-ads-auth`（脚本启动自动检查；缺失时 exit 42，stderr 打 `DEPENDENCY_MISSING`）
 
-## 共用参数（SP + SB 均适用）
+## 共用参数（SP + SB + SD 均适用）
 
 | 参数 | 类型 | 必填 | 默认 | 说明 |
 |------|------|------|------|------|
 | `profileId` | number | ✅ | — | 从 ads-auth 获取 |
 | `region` | string | ✅ | — | `NA` / `EU` / `FE` |
-| `fetchAll` | boolean | 否 | `true` | 自动按分页 token 翻完 |
-| `maxResults` | integer | 否 | `100` | 单页 1-100；超限上游可能静默 clamp |
+| `fetchAll` | boolean | 否 | `true` | 自动翻页（SP / SB 跟 `nextToken`，SD 用 `startIndex + count`） |
+| `maxResults` | integer | 否 | `100` | 单页 1-100；超限上游可能静默 clamp；对应 SD 端 `count` |
 | `skipDepCheck` | boolean | 否 | `false` | 跳过依赖检查 |
-| `includeExtendedDataFields` | boolean | 否 | — | 返回扩展字段（部分实体） |
+| `includeExtendedDataFields` | boolean | 否 | — | 返回扩展字段（部分实体）；SD 通过路径切换为 `/sd/<entity>/extended` 实现 |
 | `locale` | string | 否 | — | 本地化（keywords 支持） |
 
 ## 输出格式
@@ -56,7 +57,7 @@
 | httpStatus / exit | 含义 | 建议 |
 |-------------------|------|------|
 | 200 | 成功 | — |
-| 400 | 入参结构错 | 核对对应 adProduct 的过滤器结构（api/sp.md 或 api/sb.md） |
+| 400 | 入参结构错 | 核对对应 adProduct 的过滤器结构（api/sp.md / api/sb.md / api/sd.md） |
 | 401 | accessToken 过期 | 调 `linkfox-amazon-ads-auth/scripts/refresh_token.py` 后重试 |
 | 403 | profileId 无权限 | 核对 profileId 归属 |
 | 429 | 限流 | 间隔 2-5s 重试 |

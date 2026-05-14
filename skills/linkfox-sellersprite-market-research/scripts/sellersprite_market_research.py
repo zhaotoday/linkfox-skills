@@ -3,6 +3,8 @@
 SellerSprite Market Research - LinkFox Skill
 Calls sellersprite/market/research to query category-level market opportunities.
 
+入参提示：`min/max` 对应的 **GoodsCrn、BrandCrn、SellerCrn、EbcProportion、FbaProportion、FbmProportion、AmazonSelfProportion** 须传 **0～1 小数**（如 `0.4`），勿用整数百分数；详见 `references/api.md`。
+
 Usage:
   python sellersprite_market_research.py '{"marketplace": "US", "page": 1, "size": 50}'
 """

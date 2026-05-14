@@ -8,7 +8,7 @@
 
 ## 请求参数
 
-POST Body（JSON）。以下字段与工具网关当前登记的「MPSTATS-Ozon-商品搜索」入参 schema 一致（同步日期 2026-04-30）。
+POST Body（JSON）。以下字段与后端 `OzonItemSearchRequest` DTO 一致（同步日期 2026-05-11）。
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
@@ -36,75 +36,25 @@ POST Body（JSON）。以下字段与工具网关当前登记的「MPSTATS-Ozon-
 | costToken | integer | 消耗 Token 数量 |
 | type | string | 响应类型 |
 
-### products[*] 商品对象字段（39 个）
+### products[*] 商品对象字段（10 个）
 
-按官方 outputSchema 定义（`_mpstats_ozon_productSearch`，同步日期 2026-05-06）。该 schema 与 `brandProducts` / `categoryProducts` / `sellerProducts` 共享同一套商品卡结构；本端点以**发现为主**，部分度量字段在运行时可能为 null / 不填充。
+按后端 `OzonProductSearchItem` DTO 定义（同步日期 2026-05-11）。**search 端点为身份解析用途，不返回价/销/评/库存/周转/排名等业务指标**——这是硬契约，不是 sparse payload。如果需要那些指标：
 
-**身份与基础信息**
+- 单/批 SKU 全量卡：改用 `productDetail`（36 字段，含价格、销量、收入、周期对比等）
+- 维度下钻：改用 `brandProducts` / `categoryProducts` / `sellerProducts`（39 字段全量商品卡）
 
 | 字段 | 类型 | 说明 |
 |------|------|------|
 | productId | integer | SKU ID |
 | title | string | 商品名称（俄语） |
-| brand | string | 品牌 |
+| productPageUrl | string | 商品页 URL |
+| imageUrl | string | 主图 URL |
+| brand | string | 品牌名 |
 | brandId | integer | 品牌 ID |
 | sellerName | string | 卖家名 |
 | sellerId | integer | 卖家 ID |
-| category | string | 品类路径（俄语，`/` 分隔） |
-| nicheName | string | 赛道路径（俄语） |
-| nicheId | integer | 赛道 ID |
-| country | string | 销售国，Ozon 恒为 `RU` |
-| firstDate | string | 上架日期（`yyyy-MM-dd`） |
-| imageUrl | string | 主图 URL |
-| productPageUrl | string | 商品页 URL |
-| sourceTool / sourceType | string | 来源工具 / 数据源标识 |
-
-**价格与货币**
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| price | number | 当前售价 |
-| oldPrice | number | 折扣前原价 |
-| ozonCardPrice | number | Ozon Card 价（银行卡优惠价） |
-| minPrice / maxPrice / averagePrice | number | 统计期内最低价 / 最高价 / 均价 |
-| currency | string | 币种符号（`₽` / `$` / `€`） |
-
-**评分与评论**
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| rating | number | 评分，0-5 |
-| reviewCount | integer | 评论数 |
-
-**库存与 FBS**
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| balance | integer | 当前库存（件） |
-| balanceFbs | integer | FBS 库存（卖家自发货） |
-| frozenStocks | integer | 滞销库存 |
-| warehousesCount | integer | FBO 分仓数 |
-| isFbs | boolean | 是否 FBS 发货 |
-
-**销售与周转**
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| salesPerDay | number | 日均销量（件/日） |
-| monthlySalesUnits | integer | 统计期销量（件） |
-| monthlySalesRevenue | number | 统计期销售额 |
-| lostProfit | number | 损失销售额（缺货等造成） |
-| daysInSite | integer | 在售天数（统计期，含缺货日） |
-| daysInStock | integer | 有货天数 |
-| turnoverDays | number | 周转天数（越小越快） |
-
-**排名与占比**
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| position | integer | 当前查询维度（品类/品牌/卖家/赛道）内排名 |
-| categoryPosition | integer | 品类内排名 |
-| revenueSharePercent | number | 该 SKU 在当前查询维度的销售额占比，0-100 |
+| sourceType | string | 数据源标识，恒为 `ozon` |
+| sourceTool | string | 来源工具名，恒为 `MPSTATS-Ozon商品搜索` |
 
 ## 错误码
 

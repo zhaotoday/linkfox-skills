@@ -1,5 +1,7 @@
 ---
 name: linkfox-mpstats-ozon-product-search
+version: 1.0.1
+category: product-sourcing
 description: MPSTATS Ozon 俄罗斯站商品搜索与反查。按俄语关键词、SKU、品牌名或卖家名在 MPSTATS 数据库中检索 Ozon 商品，返回商品 ID、标题、品牌和卖家信息，是 Ozon 选品与竞品链路的起点。当用户提到 Ozon 选品、Ozon 商品搜索、俄罗斯电商选品、Ozon 关键词搜索、Ozon SKU 查询、Ozon 品牌搜品、Ozon 卖家搜品、MPSTATS Ozon、Ozon product search, MPSTATS Ozon, Russian marketplace, Ozon SKU lookup, Ozon keyword search, Ozon brand/seller search 时触发此技能。即使用户未明确提到"MPSTATS"，只要其意图是在 Ozon 俄罗斯站按关键词/品牌/卖家发现或反查商品，也应触发此技能。
 ---
 
@@ -9,7 +11,7 @@ This skill searches Ozon (Russia) products in the MPSTATS analytics database by 
 
 ## Core Concepts
 
-**MPSTATS Ozon coverage**: Ozon is Russia's largest general-category marketplace. MPSTATS indexes Ozon product listings and sales history. Per the official outputSchema, this endpoint returns the **full Ozon product card** (identity + sales, price, stock, rating, turnover, lost-profit, revenue-share, etc. — 39 fields total), shared with the brand / category / seller drill-down endpoints. In practice the endpoint's primary use is **discovery** — resolving a keyword / SKU / brand / seller into products — and runtime may leave metric fields sparse depending on coverage and the `startDate/endDate` window.
+**MPSTATS Ozon coverage**: Ozon is Russia's largest general-category marketplace. MPSTATS indexes Ozon product listings and sales history. This endpoint returns the **basic identity card only** — 10 fields: `productId` / `title` / `productPageUrl` / `imageUrl` / `brand` / `brandId` / `sellerName` / `sellerId` plus `sourceType` / `sourceTool`. Per-SKU price / sales / rating / stock / turnover / ranking are **not** returned here — the backend `OzonProductSearchItem` DTO is intentionally narrow. For those metrics, chain into `mpstats-ozon-product-detail` (batch full card, 36 fields) or the `brand/category/seller-products` drill-downs (39 fields).
 
 **Language requirement**: Keywords, brand names, and seller names must be in **Russian** (Cyrillic) — or the Latin-script form actually used on the Ozon storefront (e.g., `adidas`). If the user supplies an English or Chinese keyword, translate it to Russian first and note the translation.
 
@@ -69,10 +71,10 @@ This tool calls the LinkFox tool gateway API. See `references/api.md` for callin
 
 ## Display Rules
 
-1. **Lead with identity columns** — `productId`, `title`, `brand`, `sellerName` should headline the table since this endpoint is primarily a discovery step. Add `price` / `monthlySalesUnits` / `rating` only when those fields are actually populated in the response.
+1. **Lead with identity columns** — this endpoint returns only 10 identity fields. Headline the table with `productId`, `title`, `brand`, `sellerName`; include `productPageUrl` / `imageUrl` as secondary columns. Do **not** add price / sales / rating / stock columns — they are not in the response.
 2. **Russian titles** — preserve the original Russian title; optionally offer an English or Chinese translation on user request.
 3. **Pagination** — when `total` exceeds the page size, tell the user the total count and suggest the next page or a narrower keyword.
-4. **Do not extrapolate on null metrics** — a missing `monthlySalesUnits` here is not "zero sales"; if the user wants hard numbers, route to `mpstats-ozon-product-detail` (single SKU or batch card) or the `*-products` drill-down endpoints.
+4. **Route to drill-downs for any business metric** — business metrics are never in this response. If the user asks for sales / price / rating / stock / turnover / ranking, **always** route to `mpstats-ozon-product-detail` (single or batch) or the `*-products` drill-downs. Do not fabricate or estimate from identity fields.
 5. **Error handling** — when `code` / `errcode` is non-200, explain the reason from `msg` / `errmsg` and suggest adjusting inputs (supply at least one of the four filters, use Russian, narrow date range).
 
 ## Important Limitations
@@ -81,7 +83,7 @@ This tool calls the LinkFox tool gateway API. See `references/api.md` for callin
 - **Russian / Latin only** — non-Russian keywords generally return empty results.
 - **Date range** — `endDate` cannot be today or a future date; data is T-1.
 - **Result cap per page** — `pageSize` max is 100; paginate for larger sets.
-- **Metric-field sparsity** — the schema declares a full product card, but this endpoint often returns only identity fields. Treat price / sales / rating here as best-effort, not contractual.
+- **No business metrics** — price / sales / rating / stock / turnover / ranking are **not** in this endpoint's response at all. The backend `OzonProductSearchItem` DTO declares exactly 10 identity fields. This is a hard contract, not a sparse payload — do not assume missing metric fields could be filled in by re-calling with different dates.
 
 ## User Expression & Scenario Quick Reference
 

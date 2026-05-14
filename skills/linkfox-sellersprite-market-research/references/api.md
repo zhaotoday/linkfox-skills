@@ -12,7 +12,7 @@
 
 **必填**：仅 `marketplace`。
 
-**说明**：下列带「占比 / 集中度 / 毛利率」等描述的数值参数，若 schema 写明「输入 N 表示 N%」，则取值范围为 **0–100**。
+**说明**：带「毛利率」等且 schema 写明「输入 N 表示 N%」的数值参数，取值范围一般为 **0–100**。**例外**：下列 **GoodsCrn / BrandCrn / SellerCrn / EbcProportion / FbaProportion / FbmProportion / AmazonSelfProportion** 的 `min*` / `max*` 入参须传 **小数**，见 [集中度与结构占比](#集中度与结构占比)。
 
 ### 类目、地域与头部样本
 
@@ -46,18 +46,25 @@
 | minBrands / maxBrands | integer | 最小 / 最大品牌数量 |
 | minAvgSellers / maxAvgSellers | number | 最小 / 最大平均卖家数量 |
 
-### 集中度与结构占比（均为 0–100，表示 N%）
+### 集中度与结构占比
+
+以下 **7 组**筛选入参（对应卖家精灵字段 **GoodsCrn、BrandCrn、SellerCrn、EbcProportion、FbaProportion、FbmProportion、AmazonSelfProportion**）须传 **小数**，约定为 **0～1** 之间的比例（例如 **`0.35` 表示 35%**）。**不要**按整数百分数传 **0～100**（例如勿用 `40` 表示 40%，除非已与实网行为核对）。
 
 | 参数 | 类型 | 说明 |
 |------|------|------|
-| minGoodsCrn / maxGoodsCrn | number | 最小 / 最大商品集中度 |
-| minSellerCrn / maxSellerCrn | number | 最小 / 最大卖家集中度 |
-| minBrandCrn / maxBrandCrn | number | 最小 / 最大品牌集中度 |
-| minAmazonSelfProportion / maxAmazonSelfProportion | number | 最小 / 最大 Amazon 自营占比 |
-| minFbaProportion / maxFbaProportion | number | 最小 / 最大 FBA 占比 |
-| minFbmProportion / maxFbmProportion | number | 最小 / 最大 FBM 占比 |
-| minEbcProportion / maxEbcProportion | number | 最小 / 最大 A+ 数量占比 |
-| minNewProportion / maxNewProportion | number | 最小 / 最大新品数量占比 |
+| minGoodsCrn / maxGoodsCrn | number | 最小 / 最大商品集中度（小数 0～1） |
+| minSellerCrn / maxSellerCrn | number | 最小 / 最大卖家集中度（小数 0～1） |
+| minBrandCrn / maxBrandCrn | number | 最小 / 最大品牌集中度（小数 0～1） |
+| minAmazonSelfProportion / maxAmazonSelfProportion | number | 最小 / 最大 Amazon 自营占比（小数 0～1） |
+| minFbaProportion / maxFbaProportion | number | 最小 / 最大 FBA 占比（小数 0～1） |
+| minFbmProportion / maxFbmProportion | number | 最小 / 最大 FBM 占比（小数 0～1） |
+| minEbcProportion / maxEbcProportion | number | 最小 / 最大 A+ 数量占比（小数 0～1） |
+
+### 新品数量占比（入参刻度以 schema 为准）
+
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| minNewProportion / maxNewProportion | number | 最小 / 最大新品数量占比（与其它占比字段刻度可能不同，以工具 schema / 实网为准） |
 
 ### 价格、评分、毛利、BSR（市场平均）
 
@@ -208,7 +215,7 @@ curl -X POST https://tool-gateway.linkfox.com/sellersprite/market/research   -H 
     "marketplace": "US",
     "month": "nearly",
     "minAvgRevenue": 10000,
-    "maxGoodsCrn": 40,
+    "maxGoodsCrn": 0.4,
     "orderField": "total_amount",
     "orderDesc": true,
     "page": 1,

@@ -87,6 +87,7 @@ Get your API key and configure the environment before using any skill.
 | Skill | Description |
 | --- | --- |
 | `linkfox-walmart-search` | Search Walmart products by keyword with pricing and availability |
+| `linkfox-walmart-wmtwin` | Walmart Wmtwin |
 
 ### TikTok (EchoTik)
 
@@ -239,6 +240,9 @@ Get your API key and configure the environment before using any skill.
 
 | Skill | Description |
 | --- | --- |
+| `linkfox-ehunt-etsy-category-search` | Ehunt Etsy Category Search |
+| `linkfox-ehunt-etsy-product-query` | Ehunt Etsy Product Query |
+| `linkfox-ehunt-etsy-store-query` | Ehunt Etsy Store Query |
 | `linkfox-lingxing-erp` | Lingxing Erp |
 | `linkfox-product-title-analyze` | Analyze and optimize Amazon product listing titles |
 | `linkfox-tsearch-web-search` | Search the web for market research and trending topics |

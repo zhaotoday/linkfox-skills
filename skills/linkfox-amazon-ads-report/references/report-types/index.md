@@ -8,8 +8,9 @@
 |-----------|------|
 | SPONSORED_PRODUCTS | [`sp/`](./sp/) |
 | SPONSORED_BRANDS | [`sb/`](./sb/) |
+| SPONSORED_DISPLAY | [`sd/`](./sd/) |
 
-> Sponsored Display (SD) / Sponsored Television (ST) / Amazon DSP 暂未覆盖，后续版本支持。
+> Sponsored Television (ST) / Amazon DSP 暂未覆盖，后续版本支持。
 
 ## 数据源
 
