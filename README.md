@@ -66,8 +66,16 @@ Get your API key and configure the environment before using any skill.
 | `linkfox-amazon-reviews` | Retrieve and analyze Amazon product reviews |
 | `linkfox-amazon-search` | Search Amazon products by keyword with real-time ranking data |
 | `linkfox-amazon-search-by-image` | Find similar Amazon products using image-based search |
+| `linkfox-amazon-store-aplus-content` | Amazon Store Aplus Content |
 | `linkfox-amazon-store-auth` | Amazon Store Auth |
+| `linkfox-amazon-store-catalog` | Amazon Store Catalog |
+| `linkfox-amazon-store-customer-feedback` | Amazon Store Customer Feedback |
+| `linkfox-amazon-store-feeds` | Amazon Store Feeds |
+| `linkfox-amazon-store-listings` | Amazon Store Listings |
+| `linkfox-amazon-store-orders` | Amazon Store Orders |
+| `linkfox-amazon-store-pricing` | Amazon Store Pricing |
 | `linkfox-amazon-store-report` | Amazon Store Report |
+| `linkfox-amazon-store-uploads` | Amazon Store Uploads |
 
 ### 1688
 

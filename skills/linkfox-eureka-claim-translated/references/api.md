@@ -2,7 +2,7 @@
 
 ## 调用规范
 
-- **请求地址**：`https://tool-gateway.linkfox.com/eureka/claimDataTranslated`
+- **请求地址**：`https://tool-gateway.linkfox.com/tool-eureka/claimDataTranslated`
 - **请求方式**：POST，Content-Type: application/json
 - **认证方式**：Header `Authorization: <api_key>`，api_key 从环境变量 `LINKFOXAGENT_API_KEY` 读取（如未配置，提示用户前往 https://yxgb3sicy7.feishu.cn/wiki/GIkkweGghiyzkqkRXQKc2n0Tnre 申请）
 
@@ -61,7 +61,7 @@ POST Body（JSON）：
 ## curl 示例
 
 ```bash
-curl -X POST https://tool-gateway.linkfox.com/eureka/claimDataTranslated \
+curl -X POST https://tool-gateway.linkfox.com/tool-eureka/claimDataTranslated \
   -H "Authorization: $LINKFOXAGENT_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"patentNumber": "CN112345678A", "lang": "en", "replaceByRelated": 0}'
@@ -70,7 +70,7 @@ curl -X POST https://tool-gateway.linkfox.com/eureka/claimDataTranslated \
 ### 多专利查询并启用同族替代示例
 
 ```bash
-curl -X POST https://tool-gateway.linkfox.com/eureka/claimDataTranslated \
+curl -X POST https://tool-gateway.linkfox.com/tool-eureka/claimDataTranslated \
   -H "Authorization: $LINKFOXAGENT_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"patentNumber": "US20210012345A1,EP3456789B1", "lang": "cn", "replaceByRelated": 1}'

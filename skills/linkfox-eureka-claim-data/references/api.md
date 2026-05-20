@@ -2,7 +2,7 @@
 
 ## 调用规范
 
-- **请求地址**：`https://tool-gateway.linkfox.com/eureka/claimData`
+- **请求地址**：`https://tool-gateway.linkfox.com/tool-eureka/claimData`
 - **请求方式**：POST，Content-Type: application/json
 - **认证方式**：Header `Authorization: <api_key>`，api_key 从环境变量 `LINKFOXAGENT_API_KEY` 读取（如未配置，提示用户前往 https://yxgb3sicy7.feishu.cn/wiki/GIkkweGghiyzkqkRXQKc2n0Tnre 申请）
 
@@ -52,7 +52,7 @@ POST Body（JSON）：
 
 ```bash
 # 通过公开号查询权利要求
-curl -X POST https://tool-gateway.linkfox.com/eureka/claimData \
+curl -X POST https://tool-gateway.linkfox.com/tool-eureka/claimData \
   -H "Authorization: $LINKFOXAGENT_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"patentNumber": "CN115000000A"}'
@@ -60,7 +60,7 @@ curl -X POST https://tool-gateway.linkfox.com/eureka/claimData \
 
 ```bash
 # 通过专利ID查询，启用关联专利兜底
-curl -X POST https://tool-gateway.linkfox.com/eureka/claimData \
+curl -X POST https://tool-gateway.linkfox.com/tool-eureka/claimData \
   -H "Authorization: $LINKFOXAGENT_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"patentId": "abc123", "replaceByRelated": "1"}'
@@ -68,7 +68,7 @@ curl -X POST https://tool-gateway.linkfox.com/eureka/claimData \
 
 ```bash
 # 查询多个公开号的权利要求
-curl -X POST https://tool-gateway.linkfox.com/eureka/claimData \
+curl -X POST https://tool-gateway.linkfox.com/tool-eureka/claimData \
   -H "Authorization: $LINKFOXAGENT_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"patentNumber": "US11000000B2,EP3000000A1"}'

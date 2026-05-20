@@ -15,7 +15,7 @@ from urllib.request import urlopen, Request
 from urllib.error import HTTPError, URLError
 
 
-API_URL = "https://tool-gateway.linkfox.com/eureka/patentImageSearch"
+API_URL = "https://tool-gateway.linkfox.com/tool-eureka/patentImageSearch"
 
 VALID_MODELS = {1, 2, 3, 4}
 VALID_PATENT_TYPES = {"D", "U"}

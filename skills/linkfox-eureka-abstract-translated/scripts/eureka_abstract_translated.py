@@ -16,7 +16,7 @@ from urllib.request import urlopen, Request
 from urllib.error import HTTPError, URLError
 
 
-API_URL = "https://tool-gateway.linkfox.com/eureka/abstractDataTranslated"
+API_URL = "https://tool-gateway.linkfox.com/tool-eureka/abstractDataTranslated"
 
 
 def get_api_key():

@@ -1,6 +1,6 @@
 # Amazon 店铺授权 API Reference
 
-本文档描述 **授权与店铺/令牌管理** 相关的 API。若需经网关代理拉取报告等，请参考 `linkfox-amazon-store-report` skill。
+本文档描述 **授权与店铺/令牌管理** 相关的 API。若需经网关代理拉取报告或 **Listing 单条查询** 等，请参考 `linkfox-amazon-store-report`、`linkfox-amazon-store-listings` skill。
 
 ## Calling Conventions
 

@@ -1,7 +1,5 @@
 ---
 name: linkfox-mpstats-ozon-product-search
-version: 1.0.1
-category: product-sourcing
 description: MPSTATS Ozon 俄罗斯站商品搜索与反查。按俄语关键词、SKU、品牌名或卖家名在 MPSTATS 数据库中检索 Ozon 商品，返回商品 ID、标题、品牌和卖家信息，是 Ozon 选品与竞品链路的起点。当用户提到 Ozon 选品、Ozon 商品搜索、俄罗斯电商选品、Ozon 关键词搜索、Ozon SKU 查询、Ozon 品牌搜品、Ozon 卖家搜品、MPSTATS Ozon、Ozon product search, MPSTATS Ozon, Russian marketplace, Ozon SKU lookup, Ozon keyword search, Ozon brand/seller search 时触发此技能。即使用户未明确提到"MPSTATS"，只要其意图是在 Ozon 俄罗斯站按关键词/品牌/卖家发现或反查商品，也应触发此技能。
 ---
 
