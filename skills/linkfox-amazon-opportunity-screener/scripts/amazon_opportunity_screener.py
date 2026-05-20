@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 """
-Amazon Product Search - LinkFox Skill
-Calls the amazon/search API endpoint to simulate Amazon storefront searches.
+Amazon Opportunity Screener by Metrics - LinkFox Skill
+反向选品：基于历史商业洞察报告沉淀的指标数据池，按 30+ 项商业维度反查亚马逊赛道与关键词。
+Calls the amazon/opportunity/searchByMetrics API endpoint.
 
 Usage:
-  python amazon_search.py '{"keyword": "wireless earbuds", "amazonDomain": "amazon.com"}'
+  python amazon_opportunity_screener.py '<JSON parameters>'
+
+Examples:
+  python amazon_opportunity_screener.py '{"keyword": "whoop band", "limit": 25}'
+  python amazon_opportunity_screener.py '{"nicheBrandCountLte": 20, "nicheSearchVolumeYoyChangePctAtLeastGte": 100}'
 """
 
 import json
@@ -14,11 +19,11 @@ from urllib.request import urlopen, Request
 from urllib.error import HTTPError, URLError
 
 
-API_URL = "https://tool-gateway.linkfox.com/amazon/search"
+API_URL = "https://tool-gateway.linkfox.com/amazon/opportunity/searchByMetrics"
 
 
 def get_api_key():
-    """Retrieve the API key from environment, with a friendly prompt if missing."""
+    """从环境变量读取 API Key，缺失时友好提示。"""
     key = os.environ.get("LINKFOXAGENT_API_KEY")
     if not key:
         print(
@@ -32,7 +37,7 @@ def get_api_key():
 
 
 def call_api(params: dict) -> dict:
-    """Call the tool gateway API."""
+    """调用工具网关 API。"""
     api_key = get_api_key()
     data = json.dumps(params).encode("utf-8")
 
@@ -49,34 +54,19 @@ def call_api(params: dict) -> dict:
 
     try:
         with urlopen(req, timeout=60) as response:
-            result = json.loads(response.read().decode("utf-8"))
-        if isinstance(result, dict) and "errcode" in result and result["errcode"] != 200:
-            print(
-                f"Business error: errcode={result['errcode']}, errmsg={result.get('errmsg', '')}",
-                file=sys.stderr,
-            )
-        return result
+            return json.loads(response.read().decode("utf-8"))
     except HTTPError as e:
         body = e.read().decode("utf-8") if e.fp else ""
-        try:
-            parsed = json.loads(body) if body else None
-        except (json.JSONDecodeError, ValueError):
-            parsed = None
-        if isinstance(parsed, dict) and "errcode" in parsed:
-            return parsed
-        errmsg = f"HTTP {e.code}: {e.reason}"
-        if body:
-            errmsg += f" - {body}"
-        return {"errcode": e.code, "errmsg": errmsg}
+        return {"error": f"HTTP {e.code}: {e.reason}", "details": body}
     except URLError as e:
-        return {"errcode": -1, "errmsg": f"Connection failed: {e.reason}"}
+        return {"error": f"Connection failed: {e.reason}"}
 
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: amazon_search.py '<JSON parameters>'", file=sys.stderr)
+        print("Usage: amazon_opportunity_screener.py '<JSON parameters>'", file=sys.stderr)
         print(
-            'Example: amazon_search.py \'{"keyword": "wireless earbuds", "amazonDomain": "amazon.com"}\'',
+            'Example: amazon_opportunity_screener.py \'{"keyword": "whoop band", "limit": 25}\'',
             file=sys.stderr,
         )
         sys.exit(1)

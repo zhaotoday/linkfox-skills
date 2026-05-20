@@ -720,6 +720,6 @@ python3 scripts/wmtwin_search_competitors.py \
 - **Competitor Search Quick Start**: See `COMPETITOR_SEARCH.md`
 - **Login Script**: See `scripts/wmtwin_login.py`
 - **Search Script (with Auto Login)**: See `scripts/wmtwin_search_competitors.py`
-- **Decoder**: See `scripts/decode_api_json.py`
+- **Decoder**: See `scripts/wmtwin_complete_decoder.py`
 - **Quick Start**: See `QUICKSTART.md`
 - **Complete Guide**: See `README.md`
