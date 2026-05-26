@@ -21,7 +21,7 @@ POST Body（JSON）：
 | 站点 | station 值 | 代码 |
 |------|-----------|------|
 | 马来西亚 | malaysia | MY |
-| 台湾 | taiwan_china | Taiwan_CHN |
+| 中国台湾 | taiwan_china | Taiwan_CHN |
 | 印度尼西亚 | indonesia | ID |
 | 泰国 | thailand | TH |
 | 菲律宾 | philippines | PH |

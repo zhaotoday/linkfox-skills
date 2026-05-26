@@ -1,6 +1,8 @@
 ---
 name: linkfox-youying-shopee-product-search
-description: 友鹰Shopee商品选品工具，支持Shopee全站点的商品查询与筛选，覆盖马来西亚、台湾、印尼、泰国、菲律宾、新加坡、越南、巴西、墨西哥、智利、哥伦比亚等11个站点。当用户提到Shopee选品、虾皮商品搜索、Shopee爆款、虾皮市场分析、Shopee品类选品、虾皮关键词选品、Shopee销量筛选、虾皮价格筛选、东南亚电商选品、Shopee product search, Shopee product selection, Shopee bestsellers, Shopee market analysis时触发此技能。即使用户未明确提及"友鹰"或"Shopee"，只要其需求涉及在虾皮平台上搜索商品或筛选Shopee商品数据，也应触发此技能。
+version: 1.0.1
+category: product-sourcing
+description: 友鹰Shopee商品选品工具，支持Shopee全站点的商品查询与筛选，覆盖马来西亚、中国台湾、印尼、泰国、菲律宾、新加坡、越南、巴西、墨西哥、智利、哥伦比亚等11个站点。当用户提到Shopee选品、虾皮商品搜索、Shopee爆款、虾皮市场分析、Shopee品类选品、虾皮关键词选品、Shopee销量筛选、虾皮价格筛选、东南亚电商选品、Shopee product search, Shopee product selection, Shopee bestsellers, Shopee market analysis时触发此技能。即使用户未明确提及"友鹰"或"Shopee"，只要其需求涉及在虾皮平台上搜索商品或筛选Shopee商品数据，也应触发此技能。
 ---
 
 # 友鹰-Shopee 商品选品
@@ -56,7 +58,7 @@ This skill guides you on how to query and filter Shopee product data across 11 m
 | 站点 | station 值 | 代码 |
 |------|-----------|------|
 | 马来西亚 | malaysia | MY |
-| 台湾 | taiwan_china | Taiwan_CHN |
+| 中国台湾 | taiwan_china | Taiwan_CHN |
 | 印度尼西亚 | indonesia | ID |
 | 泰国 | thailand | TH |
 | 菲律宾 | philippines | PH |
@@ -79,7 +81,7 @@ This tool calls the LinkFox tool gateway API. See `references/api.md` for callin
 
 ### Principles for Building API Calls
 
-1. **必填站点**：每次调用必须指定 `station`。用户说"马来""马来西亚"→ `malaysia`；"台湾"→ `taiwan_china`；"印尼"→ `indonesia` 等
+1. **必填站点**：每次调用必须指定 `station`。用户说"马来""马来西亚"→ `malaysia`；"中国台湾"→ `taiwan_china`；"印尼"→ `indonesia` 等
 2. **关键词搜索**：`keyword` 为标题关键词，搭配 `keywordType` 控制匹配模式（1=整句匹配，2=多词AND，3=多词OR）
 3. **数值范围**：大多数筛选条件使用 Start/End 或 Min/Max 成对参数，按需设置单侧或双侧
 4. **排序**：`orderBy` 指定排序字段，`orderByType` 指定升/降序（默认 DESC 降序）
