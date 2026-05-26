@@ -61,6 +61,7 @@ Get your API key and configure the environment before using any skill.
 | `linkfox-amazon-ads-auth` | Amazon Ads OAuth authorization, profile discovery, and access-token management |
 | `linkfox-amazon-ads-entity` | List Amazon Ads SP/SB entities (campaigns, ad groups, keywords, product ads, targets) |
 | `linkfox-amazon-ads-report` | One-stop Amazon Ads SP/SB reporting: request, poll, download, and auto-extract |
+| `linkfox-amazon-alexa-for-shopping` | Conversational Amazon shopping via Alexa: multi-turn Q\{{SKILLS_TABLE}}A returning recommended ASINs and follow-up questions |
 | `linkfox-amazon-opportunity-report` | Generate AI-powered Amazon opportunity reports with market potential, pricing, reviews, and trend analysis |
 | `linkfox-amazon-opportunity-screener` | Reverse-screen Amazon niches and keywords by 30+ business metrics (market size, growth, competition, pricing, demographics, review themes) |
 | `linkfox-amazon-product-detail` | Get detailed Amazon product info by ASIN (price, BSR, bullets, etc.) |
