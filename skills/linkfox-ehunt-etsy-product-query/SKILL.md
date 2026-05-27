@@ -1,5 +1,7 @@
 ---
 name: linkfox-ehunt-etsy-product-query
+version: 1.0.0
+category: product-sourcing
 description: 通过 EHunt MCP 工具 `_ehunt_productQuery`（展示名「Etsy商品查询」）按多维度筛选 Etsy 商品（关键词/URL、价格、销量、收藏、评论、上架时间、类目、手工/复古等类型、Pick/Bestsell/Raving 等）。当用户提到 EHunt Etsy 商品、Etsy listing、Etsy 选品、Etsy 爆款、Etsy handmade、Etsy vintage、ehunt items、Etsy商品查询、_ehunt_productQuery 时触发。即使用户未写 EHunt，只要在 Etsy 上搜商品、看销量/价格/标签或筛品，也应触发此技能。
 ---
 
@@ -23,3 +25,28 @@ description: 通过 EHunt MCP 工具 `_ehunt_productQuery`（展示名「Etsy商
 ## 参考
 
 入参/出参表见 [references/api.md](references/api.md)。
+
+<!-- LF_LARGE_RESPONSE_BLOCK -->
+## Handling Large Responses
+
+To avoid overflowing the agent context, persist the response to disk and extract only the fields you need:
+
+```
+python scripts/response_io.py run --script scripts/ehunt_etsy_product_query.py --out-dir <DIR> '<params>'
+python scripts/response_io.py read <file> --fields "<paths>"   # or --path "<JMESPath>"
+```
+
+> Pick `--out-dir` outside any git working tree (e.g. `/tmp/...` on Unix, `%TEMP%/...` on Windows). Persisted responses may contain PII, pricing, or auth-sensitive data — do not commit them. Files are not auto-deleted; clean up when the task is done.
+
+`run` writes the full response to a file and emits only a schema preview + file path. `read` projects specific fields, with `--limit/--offset` for slicing and `--format json|jsonl|csv|table` for output.
+
+**When to prefer this pattern** — apply your judgment based on the response characteristics, e.g.:
+- High field count per record, or fields you don't need
+- Batch/paginated results (multiple items per call)
+- Long-text fields (descriptions, reviews, HTML, time series)
+- Output reused across later steps rather than consumed immediately
+
+For small, single-use responses, calling the main script directly is fine.
+
+⚠️ The preview is a truncated schema + sample, not the full data. Any field-level decision must read from the persisted file via `read`.
+<!-- /LF_LARGE_RESPONSE_BLOCK -->

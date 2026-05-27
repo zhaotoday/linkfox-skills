@@ -1,5 +1,7 @@
 ---
 name: linkfox-google-aimodel-search
+version: 1.0.0
+category: product-sourcing
 description: 基于 Google 搜索的 AI 概览（AI Overview / AI Mode）抓取与多轮追问，针对一个关键词同时返回主搜索的 AI 概览要点和多个追问问题的答案，适合用最新网页信息做深度调研、技术问答、长尾选品分析、海外消费者偏好分析。当用户提到 Google AI、AI Overview、AI Mode、谷歌AI概览、谷歌AI搜索、海外深度调研、长尾选品调研、消费者偏好分析、网页要点总结、Google AI search, AI Overview, AI Mode, deep research, consumer preference analysis 等场景时触发此技能。即使用户未明确提到"Google AI"，只要其需求是"用谷歌搜索 + AI 总结网页要点 + 多轮追问"，也应触发此技能。
 ---
 

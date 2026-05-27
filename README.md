@@ -61,7 +61,7 @@ Get your API key and configure the environment before using any skill.
 | `linkfox-amazon-ads-auth` | Amazon Ads OAuth authorization, profile discovery, and access-token management |
 | `linkfox-amazon-ads-entity` | List Amazon Ads SP/SB entities (campaigns, ad groups, keywords, product ads, targets) |
 | `linkfox-amazon-ads-report` | One-stop Amazon Ads SP/SB reporting: request, poll, download, and auto-extract |
-| `linkfox-amazon-alexa-for-shopping` | Conversational Amazon shopping via Alexa: multi-turn Q\{{SKILLS_TABLE}}A returning recommended ASINs and follow-up questions |
+| `linkfox-amazon-alexa-for-shopping` | Conversational Amazon shopping via Alexa: multi-turn Q&A returning recommended ASINs and follow-up questions |
 | `linkfox-amazon-opportunity-report` | Generate AI-powered Amazon opportunity reports with market potential, pricing, reviews, and trend analysis |
 | `linkfox-amazon-opportunity-screener` | Reverse-screen Amazon niches and keywords by 30+ business metrics (market size, growth, competition, pricing, demographics, review themes) |
 | `linkfox-amazon-product-detail` | Get detailed Amazon product info by ASIN (price, BSR, bullets, etc.) |
@@ -256,6 +256,34 @@ Get your API key and configure the environment before using any skill.
 | `linkfox-ehunt-etsy-store-query` | Ehunt Etsy Store Query |
 | `linkfox-lingxing-erp` | Lingxing Erp |
 | `linkfox-product-title-analyze` | Analyze and optimize Amazon product listing titles |
+| `linkfox-skill-creator` | Skill Creator |
+| `linkfox-temu-add-product-us` | Temu Add Product Us |
+| `linkfox-temu-ads-eu` | Temu Ads Eu |
+| `linkfox-temu-ads-global` | Temu Ads Global |
+| `linkfox-temu-ads-us` | Temu Ads Us |
+| `linkfox-temu-cancel-order-eu` | Temu Cancel Order Eu |
+| `linkfox-temu-cancel-order-global` | Temu Cancel Order Global |
+| `linkfox-temu-cancel-order-us` | Temu Cancel Order Us |
+| `linkfox-temu-compliance-global` | Temu Compliance Global |
+| `linkfox-temu-fulfillment-eu` | Temu Fulfillment Eu |
+| `linkfox-temu-fulfillment-global` | Temu Fulfillment Global |
+| `linkfox-temu-fulfillment-us` | Temu Fulfillment Us |
+| `linkfox-temu-manage-product-eu` | Temu Manage Product Eu |
+| `linkfox-temu-manage-product-global` | Temu Manage Product Global |
+| `linkfox-temu-manage-product-us` | Temu Manage Product Us |
+| `linkfox-temu-order-eu` | Temu Order Eu |
+| `linkfox-temu-order-global` | Temu Order Global |
+| `linkfox-temu-order-us` | Temu Order Us |
+| `linkfox-temu-price-eu` | Temu Price Eu |
+| `linkfox-temu-price-global` | Temu Price Global |
+| `linkfox-temu-price-us` | Temu Price Us |
+| `linkfox-temu-promotion-eu` | Temu Promotion Eu |
+| `linkfox-temu-promotion-global` | Temu Promotion Global |
+| `linkfox-temu-promotion-us` | Temu Promotion Us |
+| `linkfox-temu-returns-refunds-eu` | Temu Returns Refunds Eu |
+| `linkfox-temu-returns-refunds-global` | Temu Returns Refunds Global |
+| `linkfox-temu-returns-refunds-us` | Temu Returns Refunds Us |
+| `linkfox-temu-tax-eu` | Temu Tax Eu |
 | `linkfox-tsearch-web-search` | Search the web for market research and trending topics |
 | `linkfox-wallysmarter-product-detail` | Walmart product detail with historical pricing and sales trends via WallySmarter |
 
