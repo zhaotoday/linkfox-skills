@@ -1,7 +1,5 @@
 ---
 name: linkfox-temu-cancel-order-eu
-version: 1.0.0
-category: product-sourcing
 description: Temu 欧洲站取消订单 API（买家+卖家合一），经 LinkFox 网关转发 Partner EU：买家售后取消(bg.aftersales.cancel.*)、卖家申诉/缺货取消(temu.order.cancel.*)等。当用户提到 Temu EU 取消订单、欧洲站买家取消、卖家缺货取消、afterSalesStatusGroup、applySn、site=eu order-shipping 时触发。订单用 linkfox-temu-order-eu；美国站用 linkfox-temu-cancel-order-us；全球站用 linkfox-temu-cancel-order-global。
 ---
 

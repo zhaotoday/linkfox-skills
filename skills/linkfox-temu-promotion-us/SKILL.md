@@ -1,7 +1,5 @@
 ---
 name: linkfox-temu-promotion-us
-version: 1.0.0
-category: product-sourcing
 description: Temu 美国站电商促销 API，经 LinkFox 网关转发 Partner US Promotion / 促销活动 相关 bg/temu 接口（活动创建、报名、查询、优惠券/秒杀等，接口将按 Partner 文档逐条接入）。当用户提到 Temu US 促销、促销活动、优惠券、秒杀、活动报名、promotion campaign、product-inventory 促销 时触发。商品管理用 linkfox-temu-manage-product-us；价格用 linkfox-temu-price-us；订单用 linkfox-temu-order-us。
 ---
 

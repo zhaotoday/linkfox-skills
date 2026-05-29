@@ -1,7 +1,5 @@
 ---
 name: linkfox-temu-fulfillment-us
-version: 1.0.0
-category: product-sourcing
 description: Temu 美国站电商履行/发货 API（合一）：Buy-Shipping购标面单、合作仓履约、卖家自发货、物流跟踪等27+接口。当用户提到 Temu US 发货、购标、Buy-Shipping、合作仓、自发货、tracking、scanform、shipment.create、order-shipping 时触发。订单用 linkfox-temu-order-us。
 ---
 

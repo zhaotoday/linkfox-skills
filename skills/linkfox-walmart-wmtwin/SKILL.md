@@ -204,7 +204,7 @@ def encrypt_password(password):
 
 ## Data Decoding
 
-沃师傅API返回的数据使用了Unicode字符编码来混淆数据。本技能提供完整的解码器支持所有编码范围。
+沃师傅 API 返回的字符串常使用 Unicode U+0100–U+024F 区段的编码字符（在部分环境下看起来像乱码）。本技能通过 `scripts/wmtwin_complete_decoder.py` 自动解码；文档中的示例统一用 **`U+XXXX` 码点** 描述，不直接展示原始编码字形。
 
 ### Encoding Ranges
 
@@ -224,12 +224,12 @@ def encrypt_password(password):
 
 ```python
 # 编码示例
-'ņ' (326) → '2'                    # 评论数 (324-333)
-'ŒşŖŐ-ŒťŝşŒŠŠ' → 'ERIC-EXPRESS'      # 卖家名 (334-385)
-'$ņŅŅńŃňŲ+' → '$2110.4k+'           # 销售额 (323+324-333)
-'ȓ' (531) → '2'                    # 数字 (529-538)
-'ȟȬȣȝ-ȟȲȪȬȟȭȭ' → 'ERIC-EXPRESS'    # 卖家名 (539-564)
-'$ȓȒȒȑȐȕȿ+' → '$2110.4k+'          # 销售额 (528-590)
+'U+0146' (326) → '2'                    # 评论数 (324-333)
+'U+0152U+015FU+0156U+0150-U+0152U+0165U+015DU+015FU+0152U+0160U+0160' → 'ERIC-EXPRESS'      # 卖家名 (334-385)
+'$U+0146U+0145U+0145U+0144U+0143U+0148U+0172+' → '$2110.4k+'           # 销售额 (323+324-333)
+'U+0213' (531) → '2'                    # 数字 (529-538)
+'U+021FU+022CU+0223U+021D-U+021FU+0232U+022AU+022CU+021FU+022DU+022D' → 'ERIC-EXPRESS'    # 卖家名 (539-564)
+'$U+0213U+0212U+0212U+0211U+0210U+0215U+023F+' → '$2110.4k+'          # 销售额 (528-590)
 ```
 
 ### Using the Decoder
@@ -597,12 +597,12 @@ python3 scripts/wmtwin_search_competitors.py --keyword "iphone" --phone 13699998
 
 沃师傅使用 Unicode 字符编码数据，本工具会自动解码：
 
-| 编码示例 | 解码结果 | 类型 |
+| 编码示例（码点） | 解码结果 | 类型 |
 |---------|---------|------|
-| ȟȬȣȝ-ȟȲȪȬȟȭȭ | ERIC-EXPRESS | 卖家名称 |
-| $ȒȓȐȔȘ | $12.37 | 价格 |
-| ȓȑȑ+ | 200+ | 数量 |
-| $ȓȒȒȑȐȕȿ+ | $2110.4k+ | 销售额 |
+| U+021F…（卖家名） | ERIC-EXPRESS | 卖家名称 |
+| U+0212 U+0213… | $12.37 | 价格 |
+| U+0213 U+0211 U+0211 + | 200+ | 数量 |
+| U+0213 U+0212… | $2110.4k+ | 销售额 |
 
 ### 常见用法示例
 
@@ -721,8 +721,8 @@ python3 scripts/wmtwin_search_competitors.py \
 - **Login Script**: See `scripts/wmtwin_login.py`
 - **Search Script (with Auto Login)**: See `scripts/wmtwin_search_competitors.py`
 - **Decoder**: See `scripts/wmtwin_complete_decoder.py`
-- **Quick Start**: See `QUICKSTART.md`
-- **Complete Guide**: See `README.md`
+- **Decoding Guide**: See `DECODING.md`
+- **Auto Paging**: See `AUTO_PAGING.md`
 
 <!-- LF_LARGE_RESPONSE_BLOCK -->
 ## Handling Large Responses

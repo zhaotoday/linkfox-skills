@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
 MPSTATS Ozon Product Search - LinkFox Skill
-Searches Ozon (Russia) products via MPSTATS by keyword / SKU / brand / seller.
+Searches Ozon (Russia) products via MPSTATS by keyword or SKU.
 
 Usage:
-  python mpstats_ozon_product_search.py '{"keyword": "кроссовки", "pageSize": 50}'
+  python mpstats_ozon_product_search.py '{"keyword": "кроссовки"}'
 """
 
 import json
@@ -84,7 +84,7 @@ def main():
         print("Usage: mpstats_ozon_product_search.py '<JSON parameters>'", file=sys.stderr)
         print(
             "Example: mpstats_ozon_product_search.py "
-            "'{\"keyword\": \"кроссовки\", \"pageSize\": 50}'",
+            "'{\"keyword\": \"кроссовки\"}'",
             file=sys.stderr,
         )
         sys.exit(1)

@@ -93,6 +93,8 @@ POST /api/v1/product/search
 
 ### 成功响应
 
+> **说明**：API 原始 JSON 中部分字符串为沃师傅编码字符（Unicode U+0100–U+024F 区段），在部分编辑器中可能显示为「乱码」。本 skill 的 `wmtwin_search_competitors.py` 与 `wmtwin_complete_decoder.py` 会自动解码。下方示例为**解码后**的可读值。
+
 ```json
 {
   "code": 1,
@@ -102,31 +104,31 @@ POST /api/v1/product/search
       {
         "product_id": "B0ABCD1234",
         "title": "产品标题",
-        "additional_offer_count": "Ȓ",
-        "number_of_reviews": "ȓ",
-        "price": "$ȒȓȐȔȘ",
-        "rating": "ȗȐȔ",
+        "additional_offer_count": "1",
+        "number_of_reviews": "2",
+        "price": "$12.37",
+        "rating": "4.5",
         "sellers": [
           {
-            "display_name": "ȟȬȣȝ-ȟȲȪȬȟȭȭ",
-            "name": "ȭȽɁɍɃɉɂȻ ȣɂȷȐ",
-            "seller_rating": "ȘȔȐȖ",
-            "seller_reviews": "ȒȚȔȜȓȿ+"
+            "display_name": "ERIC-EXPRESS",
+            "name": "Simyoung Inc.",
+            "seller_rating": "4.8",
+            "seller_reviews": "1200+"
           }
         ],
         "sales_trends": [
           {
             "sales_amount": {
-              "label": "$ȓȒȒȑȐȕȿ+",
+              "label": "$2110.4k+",
               "value": 2110400
             },
             "sales_volume": {
-              "label": "ȒȚȘȐȑȿ+",
+              "label": "197.0k+",
               "value": 197000
             },
-            "month_sales_growth": "ȖȐȒȿ+",
-            "gross_profit": "$ȖȚȚȚȿ+",
-            "gross_profit_margin": "ȓȖȐȑ%"
+            "month_sales_growth": "12%+",
+            "gross_profit": "$500+",
+            "gross_profit_margin": "25%"
           }
         ]
       }
@@ -237,10 +239,10 @@ POST /api/v1/product/search
 
 | 类型 | Unicode 范围 | 解码公式 | 示例 |
 |------|-------------|---------|------|
-| 大写字母 A-Z | 539-564 | chr(65 + 码点 - 539) | ȟ(543) → E |
-| 小写字母 a-z | 565-590 | chr(97 + 码点 - 565) | ɉ(585) → u |
-| 数字 0-9 | 529-538 | 码点 - 529 | ȓ(531) → 2 |
-| 小数点 | 528 | "." | Ȑ(528) → . |
+| 大写字母 A-Z | 539-564 | chr(65 + 码点 - 539) | U+021F (543) → E |
+| 小写字母 a-z | 565-590 | chr(97 + 码点 - 565) | U+0249 (585) → u |
+| 数字 0-9 | 529-538 | 码点 - 529 | U+0213 (531) → 2 |
+| 小数点 | 528 | "." | U+0210 (528) → . |
 
 ## 使用示例
 

@@ -1,7 +1,5 @@
 ---
 name: linkfox-temu-add-product-us
-version: 1.0.0
-category: product-sourcing
 description: Temu 美国站发品（Add Product）API，经 LinkFox 网关转发 Partner US 商品接口：V2发品(temu.local.goods.v2.add)、类目属性、规格、图片上传、商品列表/详情/编辑、类目映射、SKU库存、供货价等。当用户提到 Temu 美国站发品、Temu US Add Product、goods.list、goods.detail、temu.local.goods.v2.add、商品类目映射、SKU库存、供货价、Partner US 发品文档 时触发。订单/物流请用其他 Temu skill。
 ---
 

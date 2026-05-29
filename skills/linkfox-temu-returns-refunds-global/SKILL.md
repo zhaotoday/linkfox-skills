@@ -1,7 +1,5 @@
 ---
 name: linkfox-temu-returns-refunds-global
-version: 1.0.0
-category: product-sourcing
 description: Temu 全球站电商退货与退款 API，经 LinkFox 网关转发 Partner Global Returns & Refunds / 售后退货退款 相关 bg/temu 接口（退货申请、退款、售后单查询与处理等，接口将按 Partner 文档逐条接入）。当用户提到 Temu Global 退货、退款、售后退货、return、refund、aftersales return、parentAfterSalesSn、退货单、退款单、order-shipping 售后 时触发。买家/卖家取消订单用 linkfox-temu-cancel-order-global / linkfox-temu-cancel-order-global；订单用 linkfox-temu-order-global。
 ---
 

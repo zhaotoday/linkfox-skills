@@ -1,7 +1,5 @@
 ---
 name: linkfox-temu-price-us
-version: 1.0.0
-category: product-sourcing
 description: Temu 美国站商品价格管理 API，经 LinkFox 网关转发 Partner US 价格接口：定价单列表查询(bg.local.goods.priceorder.query)、批量改 SKU 基础价(bg.local.goods.priceorder.change.sku.price)、推荐供货价/基础价估算等。当用户提到 Temu US 价格、定价单、priceorder query、priceAuditList、改供货价、批量改价、priceorder change sku price、recommendedprice query、baseprice recommend 时触发。商品管理用 linkfox-temu-manage-product-us；订单用 linkfox-temu-order-us；发品用 linkfox-temu-add-product-us。
 ---
 
