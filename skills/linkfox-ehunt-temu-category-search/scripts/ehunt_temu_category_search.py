@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-EHunt Etsy 店铺查询 — LinkFox Skill
-POST JSON 到 tool-gateway（默认路径段见 DEFAULT_PATH）。
+EHunt Temu 品类本地检索 — LinkFox Skill
+POST JSON 到 tool-gateway（默认路径段见 DEFAULT_PATH）。需 MCP 库已同步类目。
 
 Usage:
-  python ehunt_etsy_store_query.py '{"searchKey": "jewelry", "country": "US", "page": 1, "pageSize": 20}'
+  python ehunt_temu_category_search.py '{"keyword": "kitchen", "page": 1, "pageSize": 50}'
 
 环境变量：
   LINKFOXAGENT_API_KEY   必填，网关鉴权
-  LINKFOX_EHUNT_STORE_QUERY_PATH  可选，覆盖默认路径段（不含域名与首尾斜杠）
+  LINKFOX_EHUNT_TEMU_CATEGORY_SEARCH_PATH  可选，覆盖默认路径段
 """
 
 import json
@@ -20,8 +20,10 @@ from urllib.request import Request, urlopen
 BASE_URL = os.environ.get(
     "LINKFOX_TOOL_GATEWAY_BASE", "https://tool-gateway.linkfox.com"
 ).rstrip("/")
-DEFAULT_PATH = "ehunt/etsy/storeQuery"
-API_PATH = os.environ.get("LINKFOX_EHUNT_STORE_QUERY_PATH", DEFAULT_PATH).strip("/")
+DEFAULT_PATH = "ehunt/temu/temuCategorySearch"
+API_PATH = os.environ.get(
+    "LINKFOX_EHUNT_TEMU_CATEGORY_SEARCH_PATH", DEFAULT_PATH
+).strip("/")
 
 
 def get_api_key() -> str:
@@ -64,8 +66,8 @@ def call_api(params: dict) -> dict:
 def main() -> None:
     if len(sys.argv) < 2:
         print(
-            "Usage: ehunt_etsy_store_query.py '<JSON 参数>'\n"
-            "Example: ehunt_etsy_store_query.py '{\"searchKey\": \"ceramic\", \"page\": 1}'",
+            "Usage: ehunt_temu_category_search.py '<JSON 参数>'\n"
+            "Example: ehunt_temu_category_search.py '{\"keyword\": \"kitchen\"}'",
             file=sys.stderr,
         )
         sys.exit(1)

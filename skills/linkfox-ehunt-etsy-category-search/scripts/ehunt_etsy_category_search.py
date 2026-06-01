@@ -20,7 +20,7 @@ from urllib.request import Request, urlopen
 BASE_URL = os.environ.get(
     "LINKFOX_TOOL_GATEWAY_BASE", "https://tool-gateway.linkfox.com"
 ).rstrip("/")
-DEFAULT_PATH = "ehunt/etsyCategorySearch"
+DEFAULT_PATH = "ehunt/etsy/etsyCategorySearch"
 API_PATH = os.environ.get(
     "LINKFOX_EHUNT_ETSY_CATEGORY_SEARCH_PATH", DEFAULT_PATH
 ).strip("/")

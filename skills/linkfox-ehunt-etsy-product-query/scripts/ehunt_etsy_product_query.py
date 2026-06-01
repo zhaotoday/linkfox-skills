@@ -20,7 +20,7 @@ from urllib.request import Request, urlopen
 BASE_URL = os.environ.get(
     "LINKFOX_TOOL_GATEWAY_BASE", "https://tool-gateway.linkfox.com"
 ).rstrip("/")
-DEFAULT_PATH = "ehunt/productQuery"
+DEFAULT_PATH = "ehunt/etsy/productQuery"
 API_PATH = os.environ.get("LINKFOX_EHUNT_PRODUCT_QUERY_PATH", DEFAULT_PATH).strip("/")
 
 
