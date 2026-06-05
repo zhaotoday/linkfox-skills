@@ -2,10 +2,10 @@
 """
 Amazon Alexa Shopping Assistant - LinkFox Skill
 Calls the amazon/alexaSearch API endpoint.
+Only 1 prompt per call. For follow-ups, summarize prior context + new question into prompts[0].
 
 Usage:
   python amazon_alexa_search.py '{"prompts": ["best wireless earbuds for running"]}'
-  python amazon_alexa_search.py '{"prompts": ["best electric kettle", "compare with similar products"], "format": "json"}'
 """
 
 import json

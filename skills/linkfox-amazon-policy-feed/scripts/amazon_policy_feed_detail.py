@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-Amazon Help Doc Changes (list) - LinkFox Skill
-调用 amazon/helpDocChanges 接口，监控亚马逊卖家帮助文档变更，经 AI 智能筛选后
-按变更时间区间 / 标题关键词分页返回值得卖家关注的有价值变更。
+Amazon Policy & Regulation Feed (detail) - LinkFox Skill
+调用 amazon/policyFeedDetail 接口，按资讯记录 ID 查询完整正文（Markdown）。
+入参 id 来自 amazon_policy_feed.py 列表响应中的 data[].id 字段。
 
 Usage:
-  python amazon_help_doc_changes.py '{"keyword": "FBA", "pageSize": 20}'
+  python amazon_policy_feed_detail.py '{"id": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4"}'
 """
 
 import json
@@ -15,11 +15,10 @@ from urllib.request import urlopen, Request
 from urllib.error import HTTPError, URLError
 
 
-API_URL = "https://tool-gateway.linkfox.com/amazon/helpDocChanges"
+API_URL = "https://tool-gateway.linkfox.com/amazon/policyFeedDetail"
 
 
 def get_api_key():
-    """从环境变量读取 API Key，缺失时给出友好提示。"""
     key = os.environ.get("LINKFOXAGENT_API_KEY")
     if not key:
         print(
@@ -33,7 +32,6 @@ def get_api_key():
 
 
 def call_api(params: dict) -> dict:
-    """调用工具网关接口。"""
     api_key = get_api_key()
     data = json.dumps(params).encode("utf-8")
 
@@ -63,21 +61,21 @@ def call_api(params: dict) -> dict:
             parsed = json.loads(body) if body else None
         except (json.JSONDecodeError, ValueError):
             parsed = None
-        if isinstance(parsed, dict) and "errcode" in parsed:
+        if isinstance(parsed, dict) and "code" in parsed:
             return parsed
         errmsg = f"HTTP {e.code}: {e.reason}"
         if body:
             errmsg += f" - {body}"
-        return {"errcode": e.code, "errmsg": errmsg}
+        return {"code": str(e.code), "msg": errmsg}
     except URLError as e:
-        return {"errcode": -1, "errmsg": f"Connection failed: {e.reason}"}
+        return {"code": "-1", "msg": f"Connection failed: {e.reason}"}
 
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: amazon_help_doc_changes.py '<JSON parameters>'", file=sys.stderr)
+        print("Usage: amazon_policy_feed_detail.py '<JSON parameters>'", file=sys.stderr)
         print(
-            'Example: amazon_help_doc_changes.py \'{"keyword": "FBA", "pageSize": 20}\'',
+            'Example: amazon_policy_feed_detail.py \'{"id": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4"}\'',
             file=sys.stderr,
         )
         sys.exit(1)

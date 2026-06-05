@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """
-Amazon Help Doc Change Detail - LinkFox Skill
-调用 amazon/helpDocDetail 接口，按变更记录 ID 查看单篇帮助文档变更的完整信息
-（AI 变更摘要 + 具体改动点 + 最新文档全文，Markdown）。
-入参 id 来自 amazon_help_doc_changes.py 列表响应中的 data[].id 字段。
+Google AI Search - LinkFox Skill
+Calls the aiMode/googleSearch API endpoint.
+Single-round only — no prompts parameter. For follow-ups, summarize prior result + new question into keyword.
 
 Usage:
-  python amazon_help_doc_detail.py '{"id": 35}'
+  python google_ai_search.py '{"keyword": "best wireless earbuds 2026"}'
 """
 
 import json
@@ -16,11 +15,11 @@ from urllib.request import urlopen, Request
 from urllib.error import HTTPError, URLError
 
 
-API_URL = "https://tool-gateway.linkfox.com/amazon/helpDocDetail"
+API_URL = "https://tool-gateway.linkfox.com/aiMode/googleSearch"
 
 
 def get_api_key():
-    """从环境变量读取 API Key，缺失时给出友好提示。"""
+    """从环境变量读取 API Key,缺失时给出友好提示。"""
     key = os.environ.get("LINKFOXAGENT_API_KEY")
     if not key:
         print(
@@ -34,7 +33,7 @@ def get_api_key():
 
 
 def call_api(params: dict) -> dict:
-    """调用工具网关接口。"""
+    """调用 LinkFox 工具网关。"""
     api_key = get_api_key()
     data = json.dumps(params).encode("utf-8")
 
@@ -51,33 +50,21 @@ def call_api(params: dict) -> dict:
 
     try:
         with urlopen(req, timeout=60) as response:
-            result = json.loads(response.read().decode("utf-8"))
-        if isinstance(result, dict) and "errcode" in result and result["errcode"] != 200:
-            print(
-                f"Business error: errcode={result['errcode']}, errmsg={result.get('errmsg', '')}",
-                file=sys.stderr,
-            )
-        return result
+            return json.loads(response.read().decode("utf-8"))
     except HTTPError as e:
         body = e.read().decode("utf-8") if e.fp else ""
-        try:
-            parsed = json.loads(body) if body else None
-        except (json.JSONDecodeError, ValueError):
-            parsed = None
-        if isinstance(parsed, dict) and "errcode" in parsed:
-            return parsed
-        errmsg = f"HTTP {e.code}: {e.reason}"
-        if body:
-            errmsg += f" - {body}"
-        return {"errcode": e.code, "errmsg": errmsg}
+        return {"error": f"HTTP {e.code}: {e.reason}", "details": body}
     except URLError as e:
-        return {"errcode": -1, "errmsg": f"Connection failed: {e.reason}"}
+        return {"error": f"Connection failed: {e.reason}"}
 
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: amazon_help_doc_detail.py '<JSON parameters>'", file=sys.stderr)
-        print('Example: amazon_help_doc_detail.py \'{"id": 35}\'', file=sys.stderr)
+        print("Usage: google_ai_search.py '<JSON parameters>'", file=sys.stderr)
+        print(
+            'Example: google_ai_search.py \'{"keyword": "best wireless earbuds 2026"}\'',
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     try:

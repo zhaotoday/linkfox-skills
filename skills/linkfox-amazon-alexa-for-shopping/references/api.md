@@ -12,7 +12,7 @@ POST Body（JSON）：
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| prompts | string[] | 是 | 对话提示词数组，至少 1 条，建议不超过 5 条。多个元素表示同一次调用内的连续追问，按数组顺序依次发送给 Alexa：先发 `prompts[0]`，等待 Alexa 回答后再发 `prompts[1]`，以此类推。每次调用是独立的新会话，不保留跨次调用的历史上下文 |
+| prompts | string[] | 是 | 对话提示词数组，仅支持 **1 条**。每次调用只能传入 1 个问题。如需追问，agent 须自行总结上一轮回答的关键信息（推荐商品、ASIN、关键结论等），拼接新问题后作为新的 `prompts[0]` 发起新请求。每次调用是独立的新会话，不保留跨次调用的历史上下文 |
 | format | string | 否 | 响应格式，`markdown`（默认）返回可读报告；`json` 返回结构化数据数组 |
 | url | string | 否 | 联动页面 URL，用于补充 Alexa 当前答复的页面上下文。仅在用户提供了**具体页面**（分类页 / 搜索结果页 / 商品详情页等）时才传入；亚马逊首页（如 `https://www.amazon.com/`）**无需传**该参数 |
 
@@ -83,19 +83,15 @@ curl -X POST https://tool-gateway.linkfox.com/amazon/alexaSearch \
       }'
 ```
 
-**多轮对话 + JSON 格式：**
+**JSON 格式：**
 
 ```bash
 curl -X POST https://tool-gateway.linkfox.com/amazon/alexaSearch \
   -H "Authorization: $LINKFOXAGENT_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-        "prompts": [
-          "best electric kettle",
-          "compare with similar products"
-        ],
-        "format": "json",
-        "url": "https://www.amazon.com/"
+        "prompts": ["best electric kettle on Amazon US"],
+        "format": "json"
       }'
 ```
 

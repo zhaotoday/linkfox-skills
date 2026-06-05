@@ -1,7 +1,5 @@
 ---
 name: linkfox-ehunt-temu-category-search
-version: 1.0.0
-category: product-sourcing
 description: 通过 EHunt Temu 品类检索（网关路由 `ehunt/temu/temuCategorySearch`）在已同步到本地库的 EHunt Temu 类目数据中按关键词检索类目中文名、英文名与类目 id，用于商品/店铺筛选的类目 id。当用户提到 EHunt Temu 类目、Temu category id、Temu 类目树、Temu 后台类目、temu 品类、syncTemuCategory（Temu 品类同步）后查类目、Temu category search 时触发。即使用户未写 EHunt，只要在本地已同步的 Temu 类目库里按关键词找类目 id，也应触发此技能。
 ---
 

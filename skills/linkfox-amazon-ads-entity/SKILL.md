@@ -1,7 +1,5 @@
 ---
 name: linkfox-amazon-ads-entity
-version: 1.0.2
-category: product-sourcing
 description: 亚马逊广告（Amazon Ads）实体管理技能，覆盖 SP/SB/SD 三个产品线的实体查询（list）与创建/修改（create/update）操作。查询覆盖 Sponsored Products (SP) 的广告活动/广告组/关键词/否定关键词/商品广告/定向 6 个 list、Sponsored Brands (SB v4) 的广告活动/广告组/广告 3 个 list，以及 Sponsored Display (SD v3) 的广告活动/广告组/商品广告/定向/否定定向/创意 6 个 list；写操作覆盖全部实体的 create/update（含出价调整、预算修改、状态变更、Budget Rules）。当用户提到查询、创建、修改、调价亚马逊广告相关实体时触发。本技能依赖 linkfox-amazon-ads-auth。Sponsored Television (ST) / Amazon DSP 暂未覆盖。
 ---
 

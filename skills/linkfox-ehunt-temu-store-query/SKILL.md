@@ -1,7 +1,5 @@
 ---
 name: linkfox-ehunt-temu-store-query
-version: 1.0.0
-category: product-sourcing
 description: 通过 EHunt Temu 店铺查询（网关路由 `ehunt/temu/storeQuery`）按多维度筛选 Temu 店铺（店名/ID、国家站点、后台类目、全托管/半托管、总/周/月销量与销售额、评分、评论、粉丝、商品数、开店时间等）。当用户提到 EHunt Temu 店铺、Temu 店铺分析、Temu seller、Temu 店铺排行、Temu 半托管店铺、Temu 销售额、temu stores、Temu store query 时触发。即使用户未写 EHunt，只要在 Temu 上找店铺、筛店铺数据或分析店铺表现，也应触发此技能。
 ---
 

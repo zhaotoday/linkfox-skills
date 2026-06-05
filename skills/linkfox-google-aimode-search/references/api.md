@@ -2,7 +2,7 @@
 
 ## 调用规范
 
-- **请求地址**：`https://tool-gateway.linkfox.com/aiModel/googleSearch`
+- **请求地址**：`https://tool-gateway.linkfox.com/aiMode/googleSearch`
 - **请求方式**：POST，Content-Type: application/json
 - **认证方式**：Header `Authorization: <api_key>`，api_key 从环境变量 `LINKFOXAGENT_API_KEY` 读取（如未配置，提示用户前往 https://yxgb3sicy7.feishu.cn/wiki/GIkkweGghiyzkqkRXQKc2n0Tnre 申请）
 
@@ -12,8 +12,7 @@ POST Body（JSON）：
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| keyword | string | 是 | Google 搜索关键词，作为 `q=` 参数发起 Google AI Mode 搜索；最大长度 1000 字符 |
-| prompts | string[] | 否 | 多轮追问的问题数组，按顺序作为后续 AI 对话上下文；建议不超过 5 条，超过会显著拉长接口耗时但不强制限制；不需要追问时可省略 |
+| keyword | string | 是 | Google 搜索关键词，作为 `q=` 参数发起 Google AI Mode 搜索。仅支持单轮对话，不支持 prompts 追问参数。如需追问，agent 须自行总结上一轮 AI 概览的关键信息，拼接新问题后作为新的 keyword 发起新请求 |
 
 ## 响应结构
 
@@ -52,12 +51,11 @@ POST Body（JSON）：
 ## curl 示例
 
 ```bash
-curl -X POST https://tool-gateway.linkfox.com/aiModel/googleSearch \
+curl -X POST https://tool-gateway.linkfox.com/aiMode/googleSearch \
   -H "Authorization: $LINKFOXAGENT_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-        "keyword": "best wireless earbuds 2026",
-        "prompts": ["which model has best noise cancellation"]
+        "keyword": "best wireless earbuds 2026"
       }'
 ```
 
@@ -69,10 +67,10 @@ curl -X POST https://tool-gateway.linkfox.com/aiModel/googleSearch \
   "sourceUrl": "https://www.google.com/search?num=10&udm=50&q=best+wireless+earbuds+2026",
   "errcode": 200,
   "code": "200",
-  "stdout": "# Google AI Mode 概览 - best wireless earbuds 2026\n\n## 问题 1：best wireless earbuds 2026（主搜索）\n\n### AI 概览要点\n- ...\n\n## 问题 2：which model has best noise cancellation\n\n### AI 概览要点\n- ...\n",
+  "stdout": "# Google AI Mode 概览 - best wireless earbuds 2026\n\n## AI 概览要点\n- ...\n",
   "costTime": 10799,
   "costToken": 11200,
-  "resultsNum": 2,
+  "resultsNum": 1,
   "type": "stdoutWorkbenches",
   "taskId": "1779367311421-d728ce53704fc86e"
 }
@@ -89,7 +87,7 @@ curl -X POST https://tool-gateway.linkfox.com/aiModel/googleSearch \
 
 ```json
 {
-  "skillName": "linkfox-google-aimodel-search",
+  "skillName": "linkfox-google-aimode-search",
   "sentiment": "POSITIVE",
   "category": "OTHER",
   "content": "Results were accurate, user was satisfied."

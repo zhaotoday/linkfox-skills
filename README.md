@@ -3,9 +3,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-3.x-blue.svg)](https://www.python.org/)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-Open%20Standard-orange)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-77-brightgreen)](#skills-catalog)
+[![Skills](https://img.shields.io/badge/skills-76-brightgreen)](#skills-catalog)
 
-**LinkFox Skills** is an AI skill set designed for cross-border e-commerce. It provides 77 API-driven skills covering product research, competitor analysis, keyword tracking, Amazon Ads reporting, patent search, compliance detection, and more.
+**LinkFox Skills** is an AI skill set designed for cross-border e-commerce. It provides 76 API-driven skills covering product research, competitor analysis, keyword tracking, Amazon Ads reporting, patent search, compliance detection, and more.
 
 Built on the [Agent Skills](https://agentskills.io) open standard, compatible with Claude Code, Cursor, GitHub Copilot, and 30+ AI agent platforms.
 
@@ -62,10 +62,9 @@ Get your API key and configure the environment before using any skill.
 | `linkfox-amazon-ads-entity` | List Amazon Ads SP/SB entities (campaigns, ad groups, keywords, product ads, targets) |
 | `linkfox-amazon-ads-report` | One-stop Amazon Ads SP/SB reporting: request, poll, download, and auto-extract |
 | `linkfox-amazon-alexa-for-shopping` | Conversational Amazon shopping via Alexa: multi-turn Q&A returning recommended ASINs and follow-up questions |
-| `linkfox-amazon-help-doc-changes` | Monitor AI-curated valuable changes to Amazon Seller Central help docs, with change summaries and latest full document |
 | `linkfox-amazon-opportunity-report` | Generate AI-powered Amazon opportunity reports with market potential, pricing, reviews, and trend analysis |
 | `linkfox-amazon-opportunity-screener` | Reverse-screen Amazon niches and keywords by 30+ business metrics (market size, growth, competition, pricing, demographics, review themes) |
-| `linkfox-amazon-policy-news` | Browse Amazon Seller News policy & compliance announcements by site/date/keyword and read full article bodies |
+| `linkfox-amazon-policy-feed` | Query Amazon latest policy and regulation feed with AI Chinese summaries, and read full article bodies by record ID |
 | `linkfox-amazon-product-detail` | Get detailed Amazon product info by ASIN (price, BSR, bullets, etc.) |
 | `linkfox-amazon-reviews` | Retrieve and analyze Amazon product reviews |
 | `linkfox-amazon-search` | Search Amazon products by keyword with real-time ranking data |
@@ -131,7 +130,7 @@ Get your API key and configure the environment before using any skill.
 
 | Skill | Description |
 | --- | --- |
-| `linkfox-google-aimodel-search` | Google AI Mode search with optional multi-turn follow-up prompts; returns Markdown AI Overview with citations for cross-border deep research |
+| `linkfox-google-aimode-search` | Google Aimode Search |
 | `linkfox-google-trends-keyword` | Analyze Google Trends data for specific keywords |
 | `linkfox-google-trends-rising` | Discover rising and breakout search queries on Google Trends |
 
@@ -292,6 +291,8 @@ Get your API key and configure the environment before using any skill.
 | `linkfox-temu-returns-refunds-global` | Temu Returns Refunds Global |
 | `linkfox-temu-returns-refunds-us` | Temu Returns Refunds Us |
 | `linkfox-temu-tax-eu` | Temu Tax Eu |
+| `linkfox-tiktok-auth` | Tiktok Auth |
+| `linkfox-tiktok-creator` | Tiktok Creator |
 | `linkfox-tsearch-web-search` | Search the web for market research and trending topics |
 | `linkfox-wallysmarter-product-detail` | Walmart product detail with historical pricing and sales trends via WallySmarter |
 | `linkfox-xiyou-dongcha` | Xiyou Insights Amazon ASIN and keyword analytics via LinkFox gateway (traffic scores, reverse ASIN lookup, rank trends, ABA weekly data) |
