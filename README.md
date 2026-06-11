@@ -98,7 +98,6 @@ Get your API key and configure the environment before using any skill.
 | Skill | Description |
 | --- | --- |
 | `linkfox-walmart-search` | Search Walmart products by keyword with pricing and availability |
-| `linkfox-walmart-wmtwin` | Walmart Wmtwin |
 
 ### TikTok (EchoTik)
 
@@ -263,7 +262,6 @@ Get your API key and configure the environment before using any skill.
 | `linkfox-ehunt-temu-store-query` | Ehunt Temu Store Query |
 | `linkfox-lingxing-erp` | Lingxing Erp |
 | `linkfox-product-title-analyze` | Analyze and optimize Amazon product listing titles |
-| `linkfox-skill-creator` | Skill Creator |
 | `linkfox-temu-add-product-us` | Temu Add Product Us |
 | `linkfox-temu-ads-eu` | Temu Ads Eu |
 | `linkfox-temu-ads-global` | Temu Ads Global |
@@ -291,8 +289,6 @@ Get your API key and configure the environment before using any skill.
 | `linkfox-temu-returns-refunds-global` | Temu Returns Refunds Global |
 | `linkfox-temu-returns-refunds-us` | Temu Returns Refunds Us |
 | `linkfox-temu-tax-eu` | Temu Tax Eu |
-| `linkfox-tiktok-auth` | Tiktok Auth |
-| `linkfox-tiktok-creator` | Tiktok Creator |
 | `linkfox-tsearch-web-search` | Search the web for market research and trending topics |
 | `linkfox-wallysmarter-product-detail` | Walmart product detail with historical pricing and sales trends via WallySmarter |
 | `linkfox-xiyou-dongcha` | Xiyou Insights Amazon ASIN and keyword analytics via LinkFox gateway (traffic scores, reverse ASIN lookup, rank trends, ABA weekly data) |
