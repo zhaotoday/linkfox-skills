@@ -11,39 +11,34 @@ Fetch and analyze Amazon product reviews to help sellers extract actionable insi
 
 This tool retrieves real customer reviews for a given Amazon ASIN across **15 marketplaces**. You can control how many reviews to fetch per star rating (1-5 stars, up to 100 each), sort by recency or helpfulness, and apply various filters. Only one ASIN per request; for multiple ASINs, make separate calls.
 
-## API Routing
+## API Usage
 
-US and non-US marketplaces use different backend endpoints. Route by marketplace:
+All 15 marketplaces (including US) use a single unified endpoint:
 
-- **US** → `scripts/amazon_us_reviews.py`, pass `marketplace: "US"`. See `references/api_us.md`
-- **Others** → `scripts/amazon_reviews.py`, pass `domainCode: "<code>"`. See `references/api.md`
+- Call `scripts/amazon_reviews.py`, pass `domainCode: "<code>"`. Use `domainCode: "com"` for Amazon.com. See `references/api.md`
 
 ## Parameter Guide
 
 | Parameter | Type | Required | Scope | Description | Default |
 |-----------|------|----------|-------|-------------|---------|
 | asin | string | Yes | All | Amazon product ASIN | - |
-| star1Num | integer | No | All | 1-star reviews to fetch (0-100) | Non-US: 10, US: 0 |
-| star2Num | integer | No | All | 2-star reviews to fetch (0-100) | Non-US: 10, US: 0 |
-| star3Num | integer | No | All | 3-star reviews to fetch (0-100) | Non-US: 10, US: 0 |
-| star4Num | integer | No | All | 4-star reviews to fetch (0-100) | Non-US: 10, US: 0 |
-| star5Num | integer | No | All | 5-star reviews to fetch (0-100) | Non-US: 10, US: 0 |
+| star1Num | integer | No | Main endpoint | 1-star reviews to fetch (0-100) | 10 |
+| star2Num | integer | No | Main endpoint | 2-star reviews to fetch (0-100) | 10 |
+| star3Num | integer | No | Main endpoint | 3-star reviews to fetch (0-100) | 10 |
+| star4Num | integer | No | Main endpoint | 4-star reviews to fetch (0-100) | 10 |
+| star5Num | integer | No | Main endpoint | 5-star reviews to fetch (0-100) | 10 |
 | sortBy | string | No | All | `recent` (newest) or `helpful` (most helpful) | `recent` |
 | formatType | string | No | All | `current_format` or `all_formats` | `current_format` |
-| domainCode | string | No | Non-US | Marketplace code (see Supported Marketplaces) | `ca` |
-| filterByKeyword | string | No | Non-US | Filter reviews by keyword (max 1000 chars) | - |
-| reviewerType | string | No | Non-US | `all_reviews` or `avp_only_reviews` (verified only) | `all_reviews` |
-| mediaType | string | No | Non-US | `all_contents` or `media_reviews_only` | `all_contents` |
-| marketplace | string | No | US | Fixed value `US` | `US` |
-| allStarsNum | integer | No | US | Reviews across all stars (0-100); active when star1-5Num are all 0 | 10 |
-| positiveNum | integer | No | US | 4-5 star positive reviews (0-100) | 0 |
-| criticalNum | integer | No | US | 1-3 star critical reviews (0-100) | 0 |
+| domainCode | string | No | Main endpoint | Marketplace code (see Supported Marketplaces); use `com` for US | `com` |
+| filterByKeyword | string | No | Main endpoint | Filter reviews by keyword (max 1000 chars) | - |
+| reviewerType | string | No | Main endpoint | `all_reviews` or `avp_only_reviews` (verified only) | `all_reviews` |
+| mediaType | string | No | Main endpoint | `all_contents` or `media_reviews_only` | `all_contents` |
 
 ## Supported Marketplaces
 
 | Marketplace | Code |
 |-------------|------|
-| United States | `US` |
+| United States | `com` |
 | Canada | `ca` |
 | United Kingdom | `co.uk` |
 | Germany | `de` |
@@ -59,13 +54,13 @@ US and non-US marketplaces use different backend endpoints. Route by marketplace
 | Sweden | `se` |
 | United Arab Emirates | `ae` |
 
-US uses the `marketplace` parameter; all others use `domainCode`. Always confirm the user's intended marketplace.
+Use `domainCode` for every supported marketplace. Always confirm the user's intended marketplace.
 
 ## Usage Examples
 
-**1. Fetch US reviews — balanced snapshot**
+**1. Fetch US reviews (Amazon.com)**
 ```json
-{"asin": "B08N5WRWNW", "marketplace": "US", "allStarsNum": 20, "sortBy": "recent"}
+{"asin": "B08N5WRWNW", "domainCode": "com", "star1Num": 10, "star2Num": 10, "star3Num": 10, "star4Num": 10, "star5Num": 10, "sortBy": "recent"}
 ```
 
 **2. Fetch negative reviews with keyword filter (Germany)**
@@ -85,7 +80,7 @@ US uses the `marketplace` parameter; all others use `domainCode`. Always confirm
 3. **Highlight actionable insights**: Call out recurring complaints in negative reviews; note praised features in positive reviews.
 4. **Vine and verified labels**: Clearly indicate Vine Voice and verified purchase status.
 5. **Media indicators**: Note when reviews include images or videos.
-6. **Response normalization**: US reviews return `rating` as full text (e.g., "5.0 out of 5 stars") and `numberOfHelpful` as string — extract numeric values for consistent display. US reviews may also include `attributes` (color, size, etc.) — display them to show which variant was reviewed.
+6. **Response normalization**: Normalize rating and helpful-count fields for consistent display when the raw response uses marketplace-specific text formats.
 7. **Error handling**: When a query fails, explain the reason based on the response message and suggest adjusting parameters.
 8. **Single ASIN limitation**: If the user asks about multiple ASINs, make separate requests for each.
 
@@ -93,7 +88,7 @@ US uses the `marketplace` parameter; all others use `domainCode`. Always confirm
 
 - **One ASIN per request**: Only a single ASIN can be queried at a time.
 - **Per-star cap**: Each star rating returns max 100 reviews per request.
-- **Parameter scope**: `filterByKeyword`, `reviewerType`, `mediaType` are only available for non-US marketplaces; `allStarsNum`, `positiveNum`, `criticalNum` are only available for the US marketplace.
+- **Parameter scope**: `filterByKeyword`, `reviewerType`, `mediaType` are available on `/amazon/reviews/list`, including `domainCode: "com"`.
 - **No historical snapshots**: Reviews are fetched in real-time.
 - **Review text language**: Reviews are returned in their original language as posted.
 
@@ -109,9 +104,9 @@ US uses the `marketplace` parameter; all others use `domainCode`. Always confirm
 | "Get me all the 1-star reviews" | Star-filtered retrieval |
 | "Any common issues in the bad reviews" | Pain point mining |
 | "What do people like about this product" | Positive review analysis |
-| "Find reviews mentioning 'battery'" | Keyword-filtered reviews (non-US) |
-| "Show me reviews with photos" | Media-filtered reviews (non-US) |
-| "Verified purchase reviews only" | Reviewer-type filtering (non-US) |
+| "Find reviews mentioning 'battery'" | Keyword-filtered reviews |
+| "Show me reviews with photos" | Media-filtered reviews |
+| "Verified purchase reviews only" | Reviewer-type filtering |
 | "Help me analyze competitor reviews" | Competitor review research |
 | "Product improvement suggestions from reviews" | Actionable insight extraction |
 
@@ -147,7 +142,7 @@ python scripts/response_io.py read <file> --fields "<paths>"   # or --path "<JME
 
 > Pick `--out-dir` outside any git working tree (e.g. `/tmp/...` on Unix, `%TEMP%/...` on Windows). Persisted responses may contain PII, pricing, or auth-sensitive data — do not commit them. Files are not auto-deleted; clean up when the task is done.
 
-> This skill exposes multiple entry scripts: `amazon_reviews.py`, `amazon_us_reviews.py`. Pass `--script scripts/<name>.py` to choose the one you need.
+> This skill exposes one entry script: `amazon_reviews.py`.
 
 `run` writes the full response to a file and emits only a schema preview + file path. `read` projects specific fields, with `--limit/--offset` for slicing and `--format json|jsonl|csv|table` for output.
 

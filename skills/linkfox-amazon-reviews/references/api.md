@@ -10,20 +10,20 @@
 
 POST Body（JSON）：
 
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| asin | string | 是 | 亚马逊商品ASIN |
-| domainCode | string | 否 | 亚马逊域名代码，默认 `ca`。可选值：`ca`、`co.uk`、`in`、`de`、`fr`、`it`、`es`、`co.jp`、`com.au`、`com.br`、`nl`、`se`、`com.mx`、`ae` |
-| star1Num | integer | 否 | 1星评论数量，默认获取10条，最多100条 |
-| star2Num | integer | 否 | 2星评论数量，默认获取10条，最多100条 |
-| star3Num | integer | 否 | 3星评论数量，默认获取10条，最多100条 |
-| star4Num | integer | 否 | 4星评论数量，默认获取10条，最多100条 |
-| star5Num | integer | 否 | 5星评论数量，默认获取10条，最多100条 |
-| filterByKeyword | string | 否 | 按关键词筛选评论，最大长度1000字符 |
-| sortBy | string | 否 | 评论排序方式：`recent`（最新评论）或 `helpful`（最有用评论），默认 `recent` |
-| reviewerType | string | 否 | 评论者类型：`all_reviews`（所有评论）或 `avp_only_reviews`（仅认证购买），默认 `all_reviews` |
-| mediaType | string | 否 | 媒体类型：`all_contents`（所有内容）或 `media_reviews_only`（仅包含媒体的评论），默认 `all_contents` |
-| formatType | string | 否 | 格式类型：`current_format`（当前格式）或 `all_formats`（所有格式），默认 `current_format` |
+| 参数 | 类型 | 必填 | 说明                                                                                                                             |
+|------|------|------|--------------------------------------------------------------------------------------------------------------------------------|
+| asin | string | 是 | 亚马逊商品ASIN                                                                                                                      |
+| domainCode | string | 否 | 亚马逊域名代码，默认 `com`。可选值：`com`、`ca`、`co.uk`、`in`、`de`、`fr`、`it`、`es`、`co.jp`、`com.au`、`com.br`、`nl`、`se`、`com.mx`、`ae`。美国站使用 `com` |
+| star1Num | integer | 否 | 1星评论数量，默认获取10条，最多100条                                                                                                          |
+| star2Num | integer | 否 | 2星评论数量，默认获取10条，最多100条                                                                                                          |
+| star3Num | integer | 否 | 3星评论数量，默认获取10条，最多100条                                                                                                          |
+| star4Num | integer | 否 | 4星评论数量，默认获取10条，最多100条                                                                                                          |
+| star5Num | integer | 否 | 5星评论数量，默认获取10条，最多100条                                                                                                          |
+| filterByKeyword | string | 否 | 按关键词筛选评论，最大长度1000字符                                                                                                            |
+| sortBy | string | 否 | 评论排序方式：`recent`（最新评论）或 `helpful`（最有用评论），默认 `recent`                                                                            |
+| reviewerType | string | 否 | 评论者类型：`all_reviews`（所有评论）或 `avp_only_reviews`（仅认证购买），默认 `all_reviews`                                                          |
+| mediaType | string | 否 | 媒体类型：`all_contents`（所有内容）或 `media_reviews_only`（仅包含媒体的评论），默认 `all_contents`                                                    |
+| formatType | string | 否 | 格式类型：`current_format`（当前格式）或 `all_formats`（所有格式），默认 `current_format`                                                           |
 
 
 ## 响应结构
@@ -87,7 +87,7 @@ POST Body（JSON）：
 }
 ```
 
-## curl 示例
+## curl 示例（美国站）
 
 ```bash
 curl -X POST https://tool-gateway.linkfox.com/amazon/reviews/list \
@@ -95,7 +95,7 @@ curl -X POST https://tool-gateway.linkfox.com/amazon/reviews/list \
   -H "Content-Type: application/json" \
   -d '{
     "asin": "B08N5WRWNW",
-    "domainCode": "ca",
+    "domainCode": "com",
     "star1Num": 10,
     "star2Num": 10,
     "star3Num": 0,

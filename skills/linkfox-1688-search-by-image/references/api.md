@@ -14,8 +14,8 @@ POST Body（JSON）：
 
 | 参数 | 类型 | 必填 | 默认值 | 说明 |
 |------|------|------|--------|------|
-| imageUrl | string | 条件必填 | - | 图片URL地址，请确保图片URL有效且可公开访问。最大长度：1000。imageUrl/imageBase64/imageId 三选一必填 |
-| imageBase64 | string | 条件必填 | - | 图片 Base64 编码字符串（imageUrl为空时使用） |
+| imageUrl | string | 条件必填 | - | 图片URL地址，请确保图片URL有效且可公开访问。最大长度：1000。仅支持 png/jpg/jpeg 格式，不支持 webp/gif 等。imageUrl/imageBase64/imageId 三选一必填 |
+| imageBase64 | string | 条件必填 | - | 图片 Base64 编码字符串，为纯编码内容，不包含 `data:image/jpeg;base64,` 前缀。仅支持 png/jpg/jpeg 格式（imageUrl为空时使用） |
 | imageId | string | 条件必填 | - | 图片ID（1688图片ID），以图搜图查询结果中也会返回，建议当分页 page>1 查询时带 imageId，加快响应速度 |
 | page | int | 否 | 1 | 页码，从1开始 |
 | pageSize | int | 否 | 20 | 每页返回的商品数量，最大不超过50 |

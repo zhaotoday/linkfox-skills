@@ -158,7 +158,7 @@ POST Body（JSON）。以下字段与工具网关当前登记的「卖家精灵-
 | imageUrl | string | 商品图片URL |
 | price | number | 当前价格 |
 | averagePrice | number | 平均价格 |
-| primePrice | number | Prime价格 |
+| primePrice | number | Prime价格，-1表示没有 |
 | currency | string | 币种 |
 | monthlySalesUnits | integer | 月销量 |
 | monthlySalesRevenue | number | 月销售额 |
@@ -190,7 +190,7 @@ POST Body（JSON）。以下字段与工具网关当前登记的「卖家精灵-
 | dimensionsType | string | 尺寸类型 |
 | packageDimensionType | string | 包装尺寸类型 |
 | listingQualityScore | number | Listing质量得分 |
-| deliveryPrice | number | 卖家运费 |
+| deliveryPrice | number | 卖家运费，-1表示没有 |
 | nodeLabelPath | string | 类目路径 |
 | nodeIdPath | string | 节点ID路径 |
 | nodeId | integer | 节点ID |

@@ -4,7 +4,7 @@ Amazon Reviews List - LinkFox Skill
 Calls the amazon/reviews/list API endpoint
 
 Usage:
-  python amazon_reviews.py '{"asin": "B08N5WRWNW", "domainCode": "ca", "star1Num": 10, "star2Num": 10}'
+  python amazon_reviews.py '{"asin": "B08N5WRWNW", "domainCode": "com", "star1Num": 10, "star2Num": 10}'
 """
 
 import json
@@ -61,7 +61,7 @@ def main():
     if len(sys.argv) < 2:
         print("Usage: amazon_reviews.py '<JSON parameters>'", file=sys.stderr)
         print(
-            'Example: amazon_reviews.py \'{"asin": "B08N5WRWNW", "domainCode": "ca", "star1Num": 10}\'',
+            'Example: amazon_reviews.py \'{"asin": "B08N5WRWNW", "domainCode": "com", "star1Num": 10}\'',
             file=sys.stderr,
         )
         sys.exit(1)
